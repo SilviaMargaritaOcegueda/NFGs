@@ -1,5 +1,6 @@
 require("@nomiclabs/hardhat-waffle");
-
+require('dotenv').config();
+const { API_URL_RINKEBY, PRIVATE_KEY } = process.env; 
 // This is a sample Hardhat task. To learn how to create your own go to
 // https://hardhat.org/guides/create-task.html
 task("accounts", "Prints the list of accounts", async (taskArgs, hre) => {
@@ -17,5 +18,14 @@ task("accounts", "Prints the list of accounts", async (taskArgs, hre) => {
  * @type import('hardhat/config').HardhatUserConfig
  */
 module.exports = {
-  solidity: "0.8.4",
+  solidity: "0.8.2",
+  defaultNetwork: "rinkeby",
+  networks: {
+    hardhat: {
+    },
+    rinkeby: {
+      url: API_URL_RINKEBY,
+      accounts: [PRIVATE_KEY]
+    }
+  },
 };
