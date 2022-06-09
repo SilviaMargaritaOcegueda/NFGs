@@ -9,10 +9,10 @@ import "@openzeppelin/contracts/utils/math/SafeMath.sol";
 contract TennisNFT is ERC1155, Ownable {
     string public name = "Tennis NFT from NFGs";
     //Defining the ID for each NFT - for internal use
-    //uint public constant WHITE = 0;
-    //uint public constant BRONZE = 1;
-    //uint public constant SILVER = 2;
-    //uint public constant GOLD = 3;
+    uint public constant WHITE = 0;
+    uint public constant BRONZE = 1;
+    uint public constant SILVER = 2;
+    uint public constant GOLD = 3;
 
     //Define our constructor - It will mint the initial version of the above NFTs
     //ERC1155 constructor argument accepts a string memory argument named 'uri_' - The URI to our NFT metadata
