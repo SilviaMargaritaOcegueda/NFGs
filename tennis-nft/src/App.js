@@ -2,7 +2,8 @@ import { useState } from 'react'
 import logo from './tennis.png'
 import './App.css'
 //import MainMint from './MainMint';
-import { NavBar, MainMint} from './components';
+import NavBar from './NavBar';
+import MainMint from './MainMint';
 
 const App = () => {
   const [accounts, setAccounts] = useState(0)
@@ -12,15 +13,13 @@ const App = () => {
       <header className="App-header">
         <div>
           <NavBar accounts={accounts} setAccounts = {setAccounts} />
-          {/* <MainMint /> */}
+          <img src={logo} className="App-logo" alt="logo" />
         </div>
-        <img src={logo} className="App-logo" alt="logo" />
+      <div>
+
         <p>Description from Jo-Ann about our problem and our solution ;)</p>
-        {/*  */}
-        <p>
-          Edit <code>App.jsx</code> and save to test HMR updates.
-        </p>
-        
+        <MainMint />
+      </div>
       </header>
     </div>
   )
