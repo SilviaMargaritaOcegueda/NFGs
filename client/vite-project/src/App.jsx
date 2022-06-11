@@ -9,7 +9,7 @@ const App = () => {
 
   return (
     <div className="App">
-      <header className="App-header">
+      {/* <header className="App-header"> */}
         <div>
           <NavBar accounts={accounts} setAccounts = {setAccounts} />
           {/* <MainMint /> */}
@@ -21,7 +21,7 @@ const App = () => {
           Edit <code>App.jsx</code> and save to test HMR updates.
         </p>
         
-      </header>
+      {/* </header> */}
     </div>
   )
 }
