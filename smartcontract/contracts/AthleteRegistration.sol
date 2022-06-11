@@ -2,8 +2,8 @@
 
 pragma solidity ^0.8.0;
 
-import 'zeppelin-solidity/contracts/math/SafeMath.sol';
-import 'zeppelin-solidity/contracts/ownership/Ownable.sol';
+import "@openzeppelin/contracts/access/Ownable.sol";
+import "@openzeppelin/contracts/utils/math/SafeMath.sol";
 
 // contract for sports club to register Athelets
 contract AthleteRegistration is Ownable {

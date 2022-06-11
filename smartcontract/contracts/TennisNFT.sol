@@ -2,8 +2,8 @@
 pragma solidity ^0.8.1;
 
 //Import ERC1155 token contract from Openzepplin
+import "@openzeppelin/contracts/token/ERC1155/ERC1155.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
-import "@openzeppelin/contracts/utils/math/SafeMath.sol";
 
 //Define our contract
 contract TennisNFT is ERC1155, Ownable {
