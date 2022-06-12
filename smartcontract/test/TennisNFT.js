@@ -19,8 +19,9 @@ describe("TennisNFT", function(){
     
     //Hook
     beforeEach(async function(){
-
+        // If you need to send a transaction from an account other than the default one
         [admin, player, player2, ...addresses] = await ethers.getSigners();
+        // admin = await ethers.getSigners();
  
         //Create an instance of our contract
         TennisNFT = await ethers.getContractFactory("TennisNFT");
