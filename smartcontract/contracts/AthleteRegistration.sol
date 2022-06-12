@@ -8,7 +8,8 @@ import "@openzeppelin/contracts/utils/math/SafeMath.sol";
 // contract for sports club to register Athelets
 contract AthleteRegistration is Ownable {
   
-  string[4] nftSorts = [ "white", "bronze", "silver", "gold" ];
+  uint32 idCounter;
+  enum Sorts { white, bronze, silver, gold }
   
   // event for the succesful registration of a new Athelte
   event NewAthlete(uint athleteId, string name);
@@ -18,7 +19,7 @@ contract AthleteRegistration is Ownable {
     uint athleteId;
     string name;
     address athleteWallet;
-    string nftSort;
+    Sorts nftSort;
     uint32 tournaments;
     uint32 trainings;
   }
@@ -29,27 +30,24 @@ contract AthleteRegistration is Ownable {
 
   // mapping of wallet address from athelte to ID of the Athlete
   mapping ( address => uint) public athleteWalletToAthleteId;
-
-  // mapping of ID of the Athlete to Athelte data.
-  mapping (uint => Athlete) public athleteIdToAthlete;
-
+  
  /** 
-    * @dev modifier to check that a specifc _athleteId is not there already
+    * @dev modifier to check that a specifc _athleteWallet is not there already
     */  
- //   modifier athleteIdCheck(uint _athleteId) { 
- //       require(
- //           athleteWalletToAthleteId[_athleteId] ,
- //           "AthelteID not unique"
- //       );
- //       _;
- //   }
- // TO DO: add modifier to function after external: athleteIdCheck(_athleteId)
+  modifier uniqueWallet(address _athleteWallet) { 
+      require(
+          athleteWalletToAthleteId[_athleteWallet] > 0 ,
+          "Athlete wallet not unique"
+      );
+      _;
+  }
+ 
 
   // function to register a new Athelet based on input variables
-  function registerAthlete(string memory _name, address _athleteWallet) external onlyOwner {
+  function registerAthlete(string memory _name, address _athleteWallet) external uniqueWallet( _athleteWallet) onlyOwner {
     // generate a new Athlete register including the inputs from the owner stored in memory.
-    uint newId = athletes.length + 1;
-    Athlete memory _newAthlete = Athlete(newId, _name, _athleteWallet, nftSorts[0], 0, 0);
+    uint32 newId = idCounter++;
+    Athlete memory _newAthlete = Athlete(newId, _name, _athleteWallet, Sorts.white, 0, 0);
     // push the new Athelte into the array of athletes.
     athletes.push(_newAthlete);
     // require athlete wallet not exists yet!
@@ -57,8 +55,21 @@ contract AthleteRegistration is Ownable {
     athleteWalletToAthleteId[_athleteWallet] = newId;
     // set athlete ID for the new Athlete
     // require athlete id not exists yet!
-    athleteIdToAthlete[newId] = _newAthlete;
-    // emit event of succesful registration to the frontend
     emit NewAthlete(newId, _name);
   }
+
+  // function for getting information for the frontend to be shown
+  //  function getAtheltes() external view returns ( address[] memory,  uint[] memory) {
+  //     require (athletesId > 0, "No athlete in array");
+  //     address[] memory addrs = new address[](athletes.length);
+  //     uint[] memory trainings = new uint[](athletes.length);
+
+  //     for (uint i = 0; i < athletes.length; i++) {
+  //         Athlete storage athlete = athletes[i];
+  //         addrs[i] = athlete.athleteWallet;
+  //         trainings[i] = athlete.trainings;
+  //     }
+
+  //       return (addrs, trainings);
+  //   }
 }
