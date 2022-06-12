@@ -5,16 +5,20 @@ pragma solidity ^0.8.0;
 import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/utils/math/SafeMath.sol";
 
-// contract for sports club to register Athelets
+// Contract for sports club to register Athelets.
 contract AthleteRegistration is Ownable {
   
+  // This is a helper for seting the unique id
+  // it is automatically initialized by 0. 
   uint32 idCounter;
+  
+  // These are the sorts of NFTs that can be minted.
   enum Sorts { white, bronze, silver, gold }
   
-  // event for the succesful registration of a new Athelte
+  // Event for the succesful registration of a new Athelte.
   event NewAthlete(uint athleteId, string name);
   
-  // struct of Athelte with specific information of the athlete
+  // Struct of Athelte with specific information of the athlete.
   struct Athlete {
     uint athleteId;
     string name;
@@ -25,15 +29,13 @@ contract AthleteRegistration is Ownable {
   }
 
 
-  // array of athelets with its specifc data of the Athlete
+  // Array of athelets with its specifc data of the Athlete.
   Athlete[] athletes;
 
-  // mapping of wallet address from athelte to ID of the Athlete
+  // Mapping of wallet address from athelte to ID of the Athlete.
   mapping ( address => uint) public athleteWalletToAthleteId;
   
- /** 
-    * @dev modifier to check that a specifc _athleteWallet is not there already
-    */  
+ // @dev modifier to check that a specifc _athleteWallet is not there already.
   modifier uniqueWallet(address _athleteWallet) { 
       require(
           athleteWalletToAthleteId[_athleteWallet] > 0 ,
@@ -43,18 +45,17 @@ contract AthleteRegistration is Ownable {
   }
  
 
-  // function to register a new Athelet based on input variables
+  // Function to register a new Athelet based on input variables.
   function registerAthlete(string memory _name, address _athleteWallet) external uniqueWallet( _athleteWallet) onlyOwner {
-    // generate a new Athlete register including the inputs from the owner stored in memory.
+    // Generate a new Athlete register including the inputs from the owner stored in memory.
+    // Set a constant is more efficient than requesting a variable from the contract.
     uint32 newId = idCounter++;
     Athlete memory _newAthlete = Athlete(newId, _name, _athleteWallet, Sorts.white, 0, 0);
-    // push the new Athelte into the array of athletes.
+    // Push the new Athelte into the array of athletes.
     athletes.push(_newAthlete);
-    // require athlete wallet not exists yet!
-    // set wallet address for the athlete ID
+    // Set wallet address for the athlete ID.
     athleteWalletToAthleteId[_athleteWallet] = newId;
-    // set athlete ID for the new Athlete
-    // require athlete id not exists yet!
+    // Emit event to the front end.
     emit NewAthlete(newId, _name);
   }
 

@@ -82,16 +82,16 @@ contract Club is AthleteRegistration, TennisNFT {
       // amount of gold NFTs for minting.
       // Do the same for silver and bronce
       if((athletes[i].tournaments * pointsPerTournament + athletes[i].trainings) >= minimum["gold"]) {
-        athletes[i].nftSort = 3;
+        athletes[i].nftSort = Sorts.gold;
         goldCounter++;
       } else if((athletes[i].tournaments * pointsPerTournament + athletes[i].trainings) >= minimum["silver"]) {
-        athletes[i].nftSort = 2;
+        athletes[i].nftSort = Sorts.silver;
         silverCounter++;
       } else if((athletes[i].tournaments * pointsPerTournament + athletes[i].trainings) >= minimum["bronze"]) {
-        athletes[i].nftSort = 1;  
+        athletes[i].nftSort = Sorts.bronze;  
         bronzeCounter++;
       }
-      athletes[i].nftSort = 0;
+      athletes[i].nftSort = Sorts.white;
       whiteCounter++;    
         
       emit updatedNftSort(athletes[i].athleteId, athletes[i].nftSort);
