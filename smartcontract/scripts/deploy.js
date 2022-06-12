@@ -5,6 +5,10 @@ async function main(){
     const TennisNFT = await ethers.getContractFactory("TennisNFT");
     const tennisNFT = await TennisNFT.deploy();
     console.log("TennisNFT Address is : ", tennisNFT.address);
+
+    const AthleteRegistration = await ethers.getContractFactory("AthleteRegistration");
+    const athleteRegistration = await AthleteRegistration.deploy();
+    console.log("AthleteRegistration Address is : ", athleteRegistration.address);
 }
 
 main()
