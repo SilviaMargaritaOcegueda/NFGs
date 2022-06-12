@@ -59,18 +59,23 @@ contract AthleteRegistration is Ownable {
     emit NewAthlete(newId, _name);
   }
 
+function getAthleteName(address _athleteWallet) external view returns (uint){
+    uint id = athleteWalletToAthleteId[_athleteWallet];
+    return id;
+  }
+
   // function for getting information for the frontend to be shown
-  //  function getAtheltes() external view returns ( address[] memory,  uint[] memory) {
-  //     require (athletesId > 0, "No athlete in array");
-  //     address[] memory addrs = new address[](athletes.length);
-  //     uint[] memory trainings = new uint[](athletes.length);
+   function getAtheltes() external view returns ( address[] memory,  uint[] memory) {
+      require (athletesId > 0, "No athlete in array");
+      address[] memory addrs = new address[](athletes.length);
+      uint[] memory trainings = new uint[](athletes.length);
 
-  //     for (uint i = 0; i < athletes.length; i++) {
-  //         Athlete storage athlete = athletes[i];
-  //         addrs[i] = athlete.athleteWallet;
-  //         trainings[i] = athlete.trainings;
-  //     }
+      for (uint i = 0; i < athletes.length; i++) {
+          Athlete storage athlete = athletes[i];
+          addrs[i] = athlete.athleteWallet;
+          trainings[i] = athlete.trainings;
+      }
 
-  //       return (addrs, trainings);
-  //   }
+        return (addrs, trainings);
+    }
 }
