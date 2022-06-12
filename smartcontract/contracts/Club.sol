@@ -30,22 +30,22 @@ contract Club is AthleteRegistration, TennisNFT {
   
   // Map that holds the minimum percentaje of 
   // attendance to get the respective NFT sort.
-  mapping ( bytes32 => uint32 ) public minimums;
+  mapping ( Sorts => uint32 ) public minimums;
   
   // Event that notifies that the NFT sorts has been 
   // updated for all registered athletes.
-  //event updatedNftSort(uint athleteId, string nftSort);
+  event updatedNftSort(uint athleteId, Sorts nftSort);
 
   constructor(uint32 _trainingsPerYear, uint32 _pointsPerTournament) {    
     setSeason(_trainingsPerYear,  _pointsPerTournament);
     // Calculate and set the minimum of attendances to 
     // trainning sessions that each sort of NFT implies.
     // "gold" NFT(converted to bytes32) is earned when attending 90% of the sessions or more. 
-    minimum[0x676f6c64000000000000000000000000000000000000000000000000000000] = _trainingsPerYear * 90 / 100;
+    minimums[Sorts.gold] = _trainingsPerYear * 90 / 100;
     // "silver" NFT is aerned when attending 70% of the sessions or more.
-    minimum[0x73696c76657200000000000000000000000000000000000000000000000000] = _trainingsPerYear * 70 / 100;
+    minimums[Sorts.silver] = _trainingsPerYear * 70 / 100;
     // "bronze" NFT is aerned when attending 60% of the sessions or more.
-    minimum[0x62726f6e7a6500000000000000000000000000000000000000000000000000] = _trainingsPerYear * 60 / 100; 
+    minimums[Sorts.bronze] = _trainingsPerYear * 60 / 100; 
   }
 
   function setSeason(uint32 _trainingsPerYear, uint32 _pointsPerTournament) private {
@@ -66,7 +66,7 @@ contract Club is AthleteRegistration, TennisNFT {
   // all the NFTs to the atheltes based on the kind of NFT each athlete 
   // shall receive.
   function mintAndTransferNfts() external onlyOwner{
-    updatedNftSort();
+    updateNftSort();
     batchMint();
     resetRecords();
     resetCounters();
@@ -82,13 +82,13 @@ contract Club is AthleteRegistration, TennisNFT {
       // set nftSort in athletes array to gold and increments the global 
       // amount of gold NFTs for minting.
       // Do the same for silver and bronce
-      if((athletes[i].tournaments * pointsPerTournament + athletes[i].trainings) >= minimum["gold"]) {
+      if((athletes[i].tournaments * pointsPerTournament + athletes[i].trainings) >= minimums[Sorts.gold]) {
         athletes[i].nftSort = Sorts.gold;
         goldCounter++;
-      } else if((athletes[i].tournaments * pointsPerTournament + athletes[i].trainings) >= minimum["silver"]) {
+      } else if((athletes[i].tournaments * pointsPerTournament + athletes[i].trainings) >= minimums[Sorts.silver]) {
         athletes[i].nftSort = Sorts.silver;
         silverCounter++;
-      } else if((athletes[i].tournaments * pointsPerTournament + athletes[i].trainings) >= minimum["bronze"]) {
+      } else if((athletes[i].tournaments * pointsPerTournament + athletes[i].trainings) >= minimums[Sorts.bronze]) {
         athletes[i].nftSort = Sorts.bronze;  
         bronzeCounter++;
       }
@@ -131,7 +131,7 @@ contract Club is AthleteRegistration, TennisNFT {
   // It goes through each athlete data and tranfers him 1 NFT
   function transferAll() private {
     for (uint i; i < athletes.length; i++) {
-    transferNFT(msg.sender, athletes[i].athleteWallet, athletes[i].nftSort, 1)
+    transferNFT(msg.sender, athletes[i].athleteWallet, uint(athletes[i].nftSort), 1);
     }
   }  
 }
