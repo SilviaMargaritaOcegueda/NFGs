@@ -67,7 +67,7 @@ contract AthleteRegistration is Ownable {
     // Emit event to the front end.
     emit NewAthlete(idCounter, _name);
   }
-
+  // choose visebility
   function structOfAthelte(address _walletaddress) public {
     uint256 _id = athleteWalletToAthleteId[_walletaddress];
     Athlete storage athlete = athletes[_id-1];
@@ -75,13 +75,13 @@ contract AthleteRegistration is Ownable {
     //return athlete;
   }
 
-  function getArrayOfAtheltes() public view returns (Athlete[] memory) {
+  function getArrayOfAtheltes() internal view returns (Athlete[] memory) {
     Athlete[] storage athletesArray = athletes;
     return athletesArray;
   }
   
   // helper functions
-  function getCounter() public view returns (uint32) {
+  function getCounter() internal view returns (uint32) {
     return idCounter;
   }
 }

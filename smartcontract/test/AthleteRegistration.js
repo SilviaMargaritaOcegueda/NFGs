@@ -74,5 +74,7 @@ describe("AthleteRegistration", function(){
                 .to.emit(hardhatAthleteRegistration, "AtheltesToInterface")
                 .withArgs(1, player.address,"Test",0,0);
         })
+
+        // checks for getArrayOfAtheltes are missing
     });
 });
