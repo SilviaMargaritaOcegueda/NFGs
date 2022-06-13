@@ -43,6 +43,7 @@ describe("AthleteRegistration", function(){
             const address = hardhatAthleteRegistration.address;
             assert.notEqual(address, '' || null || 0x0 || undefined);
         });
+        // Checks if the intial counter is set to 0
         it('Initial counter is set to 0', async function () {
             expect((await hardhatAthleteRegistration.getCounter()).toString()).to.equal('0');
             console.log("Entries of getcounter", hardhatAthleteRegistration.getCounter());
@@ -51,8 +52,8 @@ describe("AthleteRegistration", function(){
     
     describe("Testing the Registration", async function(){
         it("Register event has been emitted when a new Athelte was registered", async function(){
-           //   Register 1 new Athelte with Name Teast and address player 
-
+           //  Register 1 new Athelte with Name Teast and address player 
+           // Checks if the emited event consists of the expected variabls
             await expect(hardhatAthleteRegistration.registerAthlete("Test", player.address))
                 .to.emit(hardhatAthleteRegistration, "NewAthlete")
                 .withArgs(1, "Test");
@@ -60,12 +61,14 @@ describe("AthleteRegistration", function(){
         
 
         it("It should check that a walletaddress can't exists two times", async function(){
+            // Checks if a wallet address can only be registerd one time
             await hardhatAthleteRegistration.registerAthlete("Test", player.address);
             await expect(hardhatAthleteRegistration.registerAthlete("Test", player.address)).to.be.reverted;
         });
 
 
         it("Test the athlete Struct for one entry", async function(){
+            // checks if the struct of the arrays consists of the Athlete which is registered
             await hardhatAthleteRegistration.registerAthlete("Test", player.address);
             await expect(hardhatAthleteRegistration.structOfAthelte(player.address))
                 .to.emit(hardhatAthleteRegistration, "AtheltesToInterface")
