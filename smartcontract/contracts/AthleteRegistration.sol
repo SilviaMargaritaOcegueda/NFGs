@@ -46,7 +46,8 @@ contract AthleteRegistration is Ownable {
  
 
   // Function to register a new Athelet based on input variables.
-  function registerAthlete(string memory _name, address _athleteWallet) external uniqueWallet( _athleteWallet) onlyOwner {
+ // function registerAthlete(string memory _name, address _athleteWallet) external uniqueWallet( _athleteWallet) onlyOwner {
+  function registerAthlete(string memory _name, address _athleteWallet) external onlyOwner {
     // Generate a new Athlete register including the inputs from the owner stored in memory.
     // Set a constant is more efficient than requesting a variable from the contract.
     uint32 newId = idCounter++;
@@ -57,11 +58,6 @@ contract AthleteRegistration is Ownable {
     athleteWalletToAthleteId[_athleteWallet] = newId;
     // Emit event to the front end.
     emit NewAthlete(newId, _name);
-  }
-
-  function getAthleteName(address _athleteWallet) external view returns (uint){
-    uint id = athleteWalletToAthleteId[_athleteWallet];
-    return id;
   }
 
   // Function for getting information for the frontend to be shown.

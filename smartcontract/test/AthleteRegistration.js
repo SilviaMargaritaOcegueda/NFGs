@@ -30,28 +30,36 @@ describe("AthleteRegistration", function(){
         hardhatAthleteRegistration = await AthleteRegistration.deploy();
 
         //Retrieving the tokenID from Contract
-        athletesId = await hardhatAthleteRegistration.athletesId;
+        athletesId = await hardhatAthleteRegistration.idCounter;
     });
 
     //Write your test cases within this sub test-suite
     //Test suite for testing deployment functionalities 
-    describe("Deployment AthleteRegistration", function(){
+    describe("Checking if conract is deployed to network", function(){
         //Mention the test case here - Test Case 1
-        it("Should set the right owner", async function(){
-            expect(await hardhatAthleteRegistration.admin()).to.equal(admin.address);
+        it("Should should deploy sucessfully", async function(){
+            const address = hardhatAthleteRegistration.address;
+            assert.notEqual(address, '' || null || 0x0 || undefined);
         });
-        // //Mention the test case here - Test Case 2
-        // it("Should set the right athletesId", async function(){
-        //     expect(await athletesId).to.equal(0);
-        //     console.log("Initializing contract with athleteId :", athletesId)
-        // });
     });
     
     describe("Testing the Registration", async function(){
         it("Should register a new Athelte", async function(){
            //Register 1 new Athelte with
-            // await hardhatAthleteRegistration.registerAthlete("Test", player.address)
-            // expect(await hardhatAthleteRegistration.getAthleteName(player.address).to.equal(1));
+            await hardhatAthleteRegistration.registerAthlete("Test", player.address)
+            const mappingAthleteWallet = hardhatAthleteRegistration.athleteWalletToAthleteId;
+            assert.notEqual(mappingAthleteWallet, '' || null || 0x0 || undefined);
+            //expect(await hardhatAthleteRegistration.athleteWalletToAthleteId(player.address).to.equal(1));
         });
     });
+    // describe('Minting of new token', async () => {
+    //     it('creates new token', async () => {
+    //     });
+    //     it('mints tokens from 0x0 address', async () => {
+    //     });
+    //     it('send tokens to minter', async () => {
+    //     });
+    //     it('token total supply is updated', async () => {
+    //     });
+    // });
 });
