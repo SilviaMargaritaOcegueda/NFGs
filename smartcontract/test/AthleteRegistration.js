@@ -1,6 +1,10 @@
 //Mocha is the framework and Chai is the library
 const { expect } = require("chai");
 const { ethers } = require("hardhat");
+// var chai = require('chai');
+// const BN = require('bn.js');
+// chai.use(require('chai-bn')(BN));
+
 var assert = require('assert');
 const { isCallTrace } = require("hardhat/internal/hardhat-network/stack-traces/message-trace");
 
@@ -13,11 +17,8 @@ describe("AthleteRegistration", function(){
     let player;
     let addresses;
     let athletesId;
-    //let bronzeId;
-    //let silverId;
-    //let goldId;
     
-    //Hook
+    //Hook // before each individual test do
     beforeEach(async function(){
         // If you need to send a transaction from an account other than the default one
         [admin, player, player2, ...addresses] = await ethers.getSigners();
@@ -31,6 +32,7 @@ describe("AthleteRegistration", function(){
 
         //Retrieving the tokenID from Contract
         athletesId = await hardhatAthleteRegistration.idCounter;
+
     });
 
     //Write your test cases within this sub test-suite
@@ -41,25 +43,33 @@ describe("AthleteRegistration", function(){
             const address = hardhatAthleteRegistration.address;
             assert.notEqual(address, '' || null || 0x0 || undefined);
         });
+        it('Initial counter is set to 0', async function () {
+            expect((await hardhatAthleteRegistration.getCounter()).toString()).to.equal('0');
+            console.log("Entries of getcounter", hardhatAthleteRegistration.getCounter());
+        });
     });
     
     describe("Testing the Registration", async function(){
-        it("Should register a new Athelte", async function(){
-           //Register 1 new Athelte with
-            await hardhatAthleteRegistration.registerAthlete("Test", player.address)
-            const mappingAthleteWallet = hardhatAthleteRegistration.athleteWalletToAthleteId;
-            assert.notEqual(mappingAthleteWallet, '' || null || 0x0 || undefined);
-            //expect(await hardhatAthleteRegistration.athleteWalletToAthleteId(player.address).to.equal(1));
+        it("Register event has been emitted when a new Athelte was registered", async function(){
+           //   Register 1 new Athelte with Name Teast and address player 
+
+            await expect(hardhatAthleteRegistration.registerAthlete("Test", player.address))
+                .to.emit(hardhatAthleteRegistration, "NewAthlete")
+                .withArgs(1, "Test");
         });
+        
+
+        it("It should check that a walletaddress can't exists two times", async function(){
+            await hardhatAthleteRegistration.registerAthlete("Test", player.address);
+            await expect(hardhatAthleteRegistration.registerAthlete("Test", player.address)).to.be.reverted;
+        });
+
+
+        it("Test the athlete Struct for one entry", async function(){
+            await hardhatAthleteRegistration.registerAthlete("Test", player.address);
+            await expect(hardhatAthleteRegistration.structOfAthelte(player.address))
+                .to.emit(hardhatAthleteRegistration, "AtheltesToInterface")
+                .withArgs(1, player.address,"Test",0,0);
+        })
     });
-    // describe('Minting of new token', async () => {
-    //     it('creates new token', async () => {
-    //     });
-    //     it('mints tokens from 0x0 address', async () => {
-    //     });
-    //     it('send tokens to minter', async () => {
-    //     });
-    //     it('token total supply is updated', async () => {
-    //     });
-    // });
 });
