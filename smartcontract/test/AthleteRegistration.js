@@ -83,16 +83,5 @@ describe("AthleteRegistration", function(){
             expect(0).to.eql(athletes[5]);
             //console.log("Entries of atheltes after registration", athletes);
         });
-
-
-        it("Test the athlete Struct for one entry", async function(){
-            // checks if the struct of the arrays consists of the Athlete which is registered
-            await hardhatAthleteRegistration.registerAthlete("Test", player.address);
-            await expect(hardhatAthleteRegistration.structOfAthelte(player.address))
-                .to.emit(hardhatAthleteRegistration, "AtheltesToInterface")
-                .withArgs(1, player.address,"Test",0,0);
-        })
-
-        // checks for getArrayOfAtheltes are missing
     });
 });
