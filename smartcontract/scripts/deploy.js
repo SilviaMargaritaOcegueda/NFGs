@@ -9,6 +9,10 @@ async function main(){
     const AthleteRegistration = await ethers.getContractFactory("AthleteRegistration");
     const athleteRegistration = await AthleteRegistration.deploy();
     console.log("AthleteRegistration Address is : ", athleteRegistration.address);
+
+    const Club = await ethers.getContractFactory("Club");
+    const club = await AthleteRegistration.deploy();
+    console.log("AthleteRegistration Address is : ", club.address);
 }
 
 main()

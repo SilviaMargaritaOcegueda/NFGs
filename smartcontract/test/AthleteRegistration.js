@@ -1,6 +1,7 @@
 //Mocha is the framework and Chai is the library
 const { expect } = require("chai");
 const { ethers } = require("hardhat")
+// for string converting to use as byte32
 const utils = ethers.utils
 
 var assert = require('assert');
@@ -14,7 +15,6 @@ describe("AthleteRegistration", function(){
     let admin;
     let player;
     let addresses;
-    let Sorts;
     
     //Hook // before each individual test do
     beforeEach(async function(){
@@ -54,7 +54,7 @@ describe("AthleteRegistration", function(){
            // Test case 3 checks if the paramter in the Event after registration are correct
            // Register 1 new Athelte with Name Test and address player 
            // Checks if the emited event consists of the expected variabls
-           const stringInBytes = utils.formatBytes32String("Test")
+            const stringInBytes = utils.formatBytes32String("Test")
             await expect(hardhatAthleteRegistration.registerAthlete(stringInBytes, player.address))
                 .to.emit(hardhatAthleteRegistration, "NewAthlete")
                 .withArgs(1, stringInBytes);

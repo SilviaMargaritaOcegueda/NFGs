@@ -129,6 +129,7 @@ contract Club is AthleteRegistration, TennisNFT {
   }
 
   // It goes through each athlete data and tranfers him 1 NFT
+  // we dont need the function anymore
   function transferAll() private {
     for (uint i; i < athletes.length; i++) {
     transferNFT(msg.sender, athletes[i].athleteWallet, uint(athletes[i].nftSort), 1);
