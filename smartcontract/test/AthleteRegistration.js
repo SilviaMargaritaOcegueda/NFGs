@@ -16,7 +16,7 @@ describe("AthleteRegistration", function(){
     let admin;
     let player;
     let addresses;
-    let athletesId;
+    let Sorts;
     
     //Hook // before each individual test do
     beforeEach(async function(){
@@ -31,8 +31,8 @@ describe("AthleteRegistration", function(){
         hardhatAthleteRegistration = await AthleteRegistration.deploy();
 
         //Retrieving the tokenID from Contract
-        athletesId = await hardhatAthleteRegistration.idCounter;
-
+        athletesId = await hardhatAthleteRegistration;
+        //console.log("Show number of athletesID", hardhatAthleteRegistration);
     });
 
     //Write your test cases within this sub test-suite
@@ -46,7 +46,7 @@ describe("AthleteRegistration", function(){
         // Checks if the intial counter is set to 0
         it('Initial counter is set to 0', async function () {
             expect((await hardhatAthleteRegistration.getCounter()).toString()).to.equal('0');
-            console.log("Entries of getcounter", hardhatAthleteRegistration.getCounter());
+            //console.log("Entries of getcounter", hardhatAthleteRegistration.getCounter());
         });
     });
     
@@ -73,6 +73,7 @@ describe("AthleteRegistration", function(){
             await expect(hardhatAthleteRegistration.structOfAthelte(player.address))
                 .to.emit(hardhatAthleteRegistration, "AtheltesToInterface")
                 .withArgs(1, player.address,"Test",0,0);
+            //expect(await hardhatAthleteRegistration.atheltes.first.tournaments()).to.equal(1);
         })
 
         // checks for getArrayOfAtheltes are missing

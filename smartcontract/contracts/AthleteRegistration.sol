@@ -14,7 +14,7 @@ contract AthleteRegistration is Ownable {
   
   // These are the sorts of NFTs that can be minted.
   enum Sorts { white, bronze, silver, gold }
-  
+
   // Event for the succesful registration of a new Athelte.
   event NewAthlete(uint athleteId, string name);
   event AtheltesToInterface(uint athleteId, address athleteWallet, string name, uint32 tournaments, uint32 trainings);
@@ -74,14 +74,14 @@ contract AthleteRegistration is Ownable {
     emit AtheltesToInterface(athlete.athleteId, athlete.athleteWallet, athlete.name, athlete.tournaments, athlete.trainings);
     //return athlete;
   }
-
-  function getArrayOfAtheltes() internal view returns (Athlete[] memory) {
+  // should cost no gas?
+  function getArrayOfAtheltes() public view returns (Athlete[] memory) {
     Athlete[] storage athletesArray = athletes;
     return athletesArray;
   }
   
   // helper functions
-  function getCounter() internal view returns (uint32) {
+  function getCounter() public view returns (uint32) {
     return idCounter;
   }
 }
