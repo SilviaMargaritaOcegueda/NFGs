@@ -13,10 +13,12 @@ contract AthleteRegistration is Ownable {
   uint32 idCounter;
   
   // These are the sorts of NFTs that can be minted.
-  enum Sorts { white, bronze, silver, gold }
+  enum Sorts { white, bronze, silver, gold } 
+  Sorts public nftSorts;
   
   // Event for the succesful registration of a new Athelte.
   event NewAthlete(uint athleteId, string name);
+  event AtheltesToInterface(uint athleteId, address athleteWallet, string name, uint32 tournaments, uint32 trainings);
   
   // Struct of Athelte with specific information of the athlete.
   struct Athlete {
@@ -38,7 +40,7 @@ contract AthleteRegistration is Ownable {
  // @dev modifier to check that a specifc _athleteWallet is not there already.
   modifier uniqueWallet(address _athleteWallet) { 
       require(
-          athleteWalletToAthleteId[_athleteWallet] > 0 ,
+          athleteWalletToAthleteId[_athleteWallet] == 0 ,
           "Athlete wallet not unique"
       );
       _;
@@ -47,35 +49,40 @@ contract AthleteRegistration is Ownable {
 
   // Function to register a new Athelet based on input variables.
   function registerAthlete(string memory _name, address _athleteWallet) external uniqueWallet( _athleteWallet) onlyOwner {
+  //function registerAthlete(string memory _name, address _athleteWallet) external onlyOwner {
     // Generate a new Athlete register including the inputs from the owner stored in memory.
     // Set a constant is more efficient than requesting a variable from the contract.
-    uint32 newId = idCounter++;
-    Athlete memory _newAthlete = Athlete(newId, _name, _athleteWallet, Sorts.white, 0, 0);
+    idCounter++;
+    athletes.push(Athlete({
+      athleteId: idCounter,
+      name: _name,
+      athleteWallet: _athleteWallet,
+      nftSort: Sorts.white,
+      tournaments: 0,
+      trainings: 0
+    }));
     // Push the new Athelte into the array of athletes.
-    athletes.push(_newAthlete);
+    //athletes.push(_newAthlete);
     // Set wallet address for the athlete ID.
-    athleteWalletToAthleteId[_athleteWallet] = newId;
+    athleteWalletToAthleteId[_athleteWallet] = idCounter;
     // Emit event to the front end.
-    emit NewAthlete(newId, _name);
+    emit NewAthlete(idCounter, _name);
+  }
+  // choose visebility
+  function structOfAthelte(address _walletaddress) public {
+    uint256 _id = athleteWalletToAthleteId[_walletaddress];
+    Athlete storage athlete = athletes[_id-1];
+    emit AtheltesToInterface(athlete.athleteId, athlete.athleteWallet, athlete.name, athlete.tournaments, athlete.trainings);
+    //return athlete;
   }
 
-  function getAthleteName(address _athleteWallet) external view returns (uint){
-    uint id = athleteWalletToAthleteId[_athleteWallet];
-    return id;
+  function getArrayOfAtheltes() public view returns (Athlete[] memory) {
+    Athlete[] storage athletesArray = athletes;
+    return athletesArray;
   }
-
-  // Function for getting information for the frontend to be shown.
-  function getAtheltes() external view returns ( address[] memory,  uint[] memory) {
-    require (idCounter > 0, "No athlete registered");
-    address[] memory addrs = new address[](athletes.length);
-    uint[] memory trainings = new uint[](athletes.length);
-
-    for (uint i = 0; i < athletes.length; i++) {
-        Athlete storage athlete = athletes[i];
-        addrs[i] = athlete.athleteWallet;
-        trainings[i] = athlete.trainings;
-    }
-
-      return (addrs, trainings);
+  
+  // helper functions
+  function getCounter() public view returns (uint32) {
+    return idCounter;
   }
 }

@@ -37,7 +37,7 @@ contract Club is AthleteRegistration, TennisNFT {
   event updatedNftSort(uint athleteId, Sorts nftSort);
 
   constructor(uint32 _trainingsPerYear, uint32 _pointsPerTournament) {    
-    setSeason(_trainingsPerYear,  _pointsPerTournament);
+    setSeason(_trainingsPerYear, _pointsPerTournament);
     // Calculate and set the minimum of attendances to 
     // trainning sessions that each sort of NFT implies.
     // "gold" NFT(converted to bytes32) is earned when attending 90% of the sessions or more. 
@@ -47,6 +47,14 @@ contract Club is AthleteRegistration, TennisNFT {
     // "bronze" NFT is aerned when attending 60% of the sessions or more.
     minimums[Sorts.bronze] = _trainingsPerYear * 60 / 100; 
   }
+
+  // function getGoldMin() public view returns(uint32) {
+  //   return minimums[Sorts.gold];
+  // }
+
+  // function getMinimums() public view returns (uint32) {
+  //    return uint32(minimums);
+  // }
 
   function setSeason(uint32 _trainingsPerYear, uint32 _pointsPerTournament) private {
     pointsPerTournament = _pointsPerTournament;
