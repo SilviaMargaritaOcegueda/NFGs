@@ -1,6 +1,7 @@
 require("@nomiclabs/hardhat-waffle");
 require('@openzeppelin/hardhat-upgrades');
 require('dotenv').config();
+require("@nomiclabs/hardhat-ethers");
 // to check transaction on etherscan import it
 //  it is 'like' the remix frontend and you can see all implemented functionality
 require("@nomiclabs/hardhat-etherscan");
