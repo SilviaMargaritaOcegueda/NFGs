@@ -18,10 +18,10 @@ contract TennisNFT is ERC1155, Ownable {
     uint public constant GOLD = 3;
 
     //Determining the number of tokens to be minted during deployment
-    uint public constant whiteIdInitialCount = 45;
-    uint public constant bronzeIdInitialCount = 15;
-    uint public constant silverIdInitialCount = 15;
-    uint public constant goldIdInitialCount = 15;
+    // uint public constant whiteIdInitialCount = 45;
+    // uint public constant bronzeIdInitialCount = 15;
+    // uint public constant silverIdInitialCount = 15;
+    // uint public constant goldIdInitialCount = 15;
 
     //Define our constructor - It will mint the initial version of the above NFTs
     //ERC1155 constructor argument accepts a string memory argument named 'uri_' - The URI to our NFT metadata
@@ -32,10 +32,10 @@ contract TennisNFT is ERC1155, Ownable {
         //Call the _mint() function of ERC1155 in order to mint the initial NFTs
         //_mint() accepts parameters - account(initial owner of these NFTs), id, amount, data (only for internal purpose)
         //Creates 'amount' of tokens of token type 'id' and assigns them to 'account'
-        _mint(admin, WHITE, whiteIdInitialCount, "");
-        _mint(admin, BRONZE, bronzeIdInitialCount, "");
-        _mint(admin, SILVER, silverIdInitialCount, "");
-        _mint(admin, GOLD, goldIdInitialCount, "");
+        // _mint(admin, WHITE, whiteIdInitialCount, "");
+        // _mint(admin, BRONZE, bronzeIdInitialCount, "");
+        // _mint(admin, SILVER, silverIdInitialCount, "");
+        // _mint(admin, GOLD, goldIdInitialCount, "");
 
     }
 
