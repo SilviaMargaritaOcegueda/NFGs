@@ -2,9 +2,6 @@
 const { expect } = require("chai");
 const { ethers } = require("hardhat")
 const utils = ethers.utils
-// var chai = require('chai');
-// const BN = require('bn.js');
-// chai.use(require('chai-bn')(BN));
 
 var assert = require('assert');
 const { isCallTrace } = require("hardhat/internal/hardhat-network/stack-traces/message-trace");
@@ -39,22 +36,23 @@ describe("AthleteRegistration", function(){
 
     //Write your test cases within this sub test-suite
     //Test suite for testing deployment functionalities 
-    describe("Checking if conract is deployed to network", function(){
-        //Mention the test case here - Test Case 1
-        it("Should should deploy sucessfully", async function(){
+    describe("Checking if contract is deployed to network", function(){
+        //Testcase 1 Succesful deployment
+        it("Should deploy sucessfully", async function(){
             const address = hardhatAthleteRegistration.address;
             assert.notEqual(address, '' || null || 0x0 || undefined);
         });
-        // Checks if the intial counter is set to 0
+        // Testscase 2 Checks if the intial counter is set to 0
         it('Initial counter is set to 0', async function () {
             expect(await(hardhatAthleteRegistration.connect(admin).idCounter())).to.eql(0);
-            console.log("Entries of athelteID", athletesId);
+            //console.log("Entries of athelteID", athletesId);
         });
     });
     
     describe("Testing the Registration", async function(){
         it("Register event has been emitted when a new Athelte was registered", async function(){
-           //  Register 1 new Athelte with Name Teast and address player 
+           // Test case 3 checks if the paramter in the Event after registration are correct
+           // Register 1 new Athelte with Name Test and address player 
            // Checks if the emited event consists of the expected variabls
            const stringInBytes = utils.formatBytes32String("Test")
             await expect(hardhatAthleteRegistration.registerAthlete(stringInBytes, player.address))
@@ -64,7 +62,7 @@ describe("AthleteRegistration", function(){
         
 
         it("It should check that a walletaddress can't exists two times", async function(){
-            // Checks if a wallet address can only be registerd one time
+            // Test case 4 Checks if a wallet address can only be registerd one time
             const stringInBytes = utils.formatBytes32String("Test")
             await hardhatAthleteRegistration.registerAthlete(stringInBytes, player.address);
             await expect(hardhatAthleteRegistration.registerAthlete(stringInBytes, player.address)).to.be.reverted;
@@ -72,6 +70,7 @@ describe("AthleteRegistration", function(){
 
 
         it("Tests the if the athlete is added to the athletes Array after registration", async function(){
+            // Test 5 checks if the values inside the Atheltes array are set correct after a registration
             const stringInBytes = utils.formatBytes32String("Test")
             await hardhatAthleteRegistration.registerAthlete(stringInBytes, player.address);
             const athletes = await (hardhatAthleteRegistration.connect(admin).athletes(0));
@@ -82,8 +81,7 @@ describe("AthleteRegistration", function(){
             expect(0).to.eql(athletes[3]);
             expect(0).to.eql(athletes[4]);
             expect(0).to.eql(athletes[5]);
-            console.log("Entries of atheltes after registration", athletes);
+            //console.log("Entries of atheltes after registration", athletes);
         });
-        // checks for getArrayOfAtheltes are missing
     });
 });
