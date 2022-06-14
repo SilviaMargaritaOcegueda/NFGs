@@ -48,20 +48,20 @@ describe("TennisNFT", function(){
         //Test Case 2
         it("Should mint specified number of NFTs from each category and assign it to the owner", async function(){
 
-            console.log("Signers Object: ", admin);
+            //console.log("Signers Object: ", admin);
 
             //I have to pass the tokenId as second argument. Figuring out how to do it
-            console.log("Admin Address is ", admin.address);
+            //console.log("Admin Address is ", admin.address);
             
             //Checking the number of tokens the owner has, in each tokenId
             const adminWhiteBalance = await hardhatTennisNFT.checkBalanceOf(admin.address, whiteId);
-            console.log("Number of White NFTs with the Admin is ", adminWhiteBalance);
+            //console.log("Number of White NFTs with the Admin is ", adminWhiteBalance);
             const adminBronzeBalance = await hardhatTennisNFT.checkBalanceOf(admin.address, bronzeId);
-            console.log("Number of Bronze NFTs with the Admin is ", adminBronzeBalance);
+            //console.log("Number of Bronze NFTs with the Admin is ", adminBronzeBalance);
             const adminSilverBalance = await hardhatTennisNFT.checkBalanceOf(admin.address, silverId);
-            console.log("Number of Silver NFTs with the Admin is ", adminSilverBalance);
+            //console.log("Number of Silver NFTs with the Admin is ", adminSilverBalance);
             const adminGoldBalance = await hardhatTennisNFT.checkBalanceOf(admin.address, goldId);
-            console.log("Number of Gold NFTs with the Admin is ", adminGoldBalance);
+            //console.log("Number of Gold NFTs with the Admin is ", adminGoldBalance);
 
             //Checking if the total tokens minted during deployment is correct and is assigned to the owner
             expect(await hardhatTennisNFT.whiteIdInitialCount()).to.equal(adminWhiteBalance);
