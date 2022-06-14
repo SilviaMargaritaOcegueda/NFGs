@@ -32,7 +32,7 @@ contract AthleteRegistration is Ownable {
 
 
   // Array of athelets with its specifc data of the Athlete.
-  Athlete[] athletes;
+  Athlete[] public athletes;
 
   // Mapping of wallet address from athelte to ID of the Athlete.
   mapping ( address => uint) public athleteWalletToAthleteId;
@@ -76,7 +76,7 @@ contract AthleteRegistration is Ownable {
     //return athlete;
   }
 
-  function getArrayOfAtheltes() public view returns (Athlete[] memory) {
+  function getAtheltes() public view returns (Athlete[] memory) {
     Athlete[] storage athletesArray = athletes;
     return athletesArray;
   }

@@ -19,22 +19,15 @@ contract Club is AthleteRegistration, TennisNFT {
   // to assign an athlete for participating on a tournament.
   uint32 public pointsPerTournament;
   
-  // Public counter that stores the quantity of each 
-  // NFT sort earned by the athletes. 
-  // Admin can consult this information any time after 
-  // caling the updateNftSort function
-  uint32 public whiteCounter;
-  uint32 public bronzeCounter;
-  uint32 public silverCounter;
-  uint32 public goldCounter;
-  
   // Map that holds the minimum percentaje of 
   // attendance to get the respective NFT sort.
   mapping ( Sorts => uint32 ) public minimums;
   
-  // Event that notifies that the NFT sorts has been 
-  // updated for all registered athletes.
-  event updatedNftSort(uint athleteId, Sorts nftSort);
+  // Notifies that the records and NFT sort had been updated.
+  event AthleteRecordsUpdated(uint athleteId, Sorts nftSort);
+
+  // Notifies NFT sort that has been minted for specific athlete.
+  event Minted(uint athletId, Sorts nftSort);
 
   constructor(uint32 _trainingsPerYear, uint32 _pointsPerTournament) {    
     setSeason(_trainingsPerYear, _pointsPerTournament);
@@ -48,14 +41,6 @@ contract Club is AthleteRegistration, TennisNFT {
     minimums[Sorts.bronze] = _trainingsPerYear * 60 / 100; 
   }
 
-  // function getGoldMin() public view returns(uint32) {
-  //   return minimums[Sorts.gold];
-  // }
-
-  // function getMinimums() public view returns (uint32) {
-  //    return uint32(minimums);
-  // }
-
   function setSeason(uint32 _trainingsPerYear, uint32 _pointsPerTournament) private {
     pointsPerTournament = _pointsPerTournament;
     trainingsPerYear = _trainingsPerYear;
@@ -64,82 +49,49 @@ contract Club is AthleteRegistration, TennisNFT {
   // The admin can update the records by incrementing the number of 
   // attendances and tournaments joined.
   function incrementRecords(uint _athleteId, uint32 _tournaments, uint32 _trainings) external onlyOwner {
-    athletes[_athleteId-1].tournaments += _tournaments;
-    athletes[_athleteId-1].trainings += _trainings;
+    uint athletesIndex = _athleteId - 1;
+    athletes[athletesIndex].tournaments += _tournaments;
+    athletes[athletesIndex].trainings += _trainings;
+    // Triggers the calculation of attendances of each 
+    // athlete and update the sort of NFT earned.
+    updateNftSort(athletesIndex);
+    emit AthleteRecordsUpdated(_athleteId, athletes[athletesIndex].nftSort);
+  }
+      
+
+  function updateNftSort(uint _athletesIndex) private {
+    // Set nftSort to gold in athletes array if the amount of trainings
+    //  is higher than the minimum. 
+    if((athletes[_athletesIndex].tournaments * pointsPerTournament + athletes[_athletesIndex].trainings) >= minimums[Sorts.gold]) {
+      athletes[_athletesIndex].nftSort = Sorts.gold;
+    // Do the same for silver and bronce
+    } else if((athletes[_athletesIndex].tournaments * pointsPerTournament + athletes[_athletesIndex].trainings) >= minimums[Sorts.silver]) {
+      athletes[_athletesIndex].nftSort = Sorts.silver;
+    } else if((athletes[_athletesIndex].tournaments * pointsPerTournament + athletes[_athletesIndex].trainings) >= minimums[Sorts.bronze]) {
+      athletes[_athletesIndex].nftSort = Sorts.bronze;
+    }    
   }
 
-  // It sets, to each athlete, the NFT sort according to its
-  // last records, mint all the NFTs, reset the athletes records, 
-  // the NFT counters and just then, to avoid reentrancy, transfers
-  // all the NFTs to the atheltes based on the kind of NFT each athlete 
-  // shall receive.
-  function mintAndTransferNfts() external onlyOwner{
-    updateNftSort();
-    batchMint();
-    resetRecords();
-    resetCounters();
-    transferAll();
-  }
-  
-  // The admin can trigger the calculation of attendances of each 
-  // athlete and update the sort of NFT earned.
-  function updateNftSort() public onlyOwner {
-    // for each athelte in the athletes array
-    for (uint i; i < athletes.length; i++) {
-      // If the amount of trainings is higher than the percentag to reach
-      // set nftSort in athletes array to gold and increments the global 
-      // amount of gold NFTs for minting.
-      // Do the same for silver and bronce
-      if((athletes[i].tournaments * pointsPerTournament + athletes[i].trainings) >= minimums[Sorts.gold]) {
-        athletes[i].nftSort = Sorts.gold;
-        goldCounter++;
-      } else if((athletes[i].tournaments * pointsPerTournament + athletes[i].trainings) >= minimums[Sorts.silver]) {
-        athletes[i].nftSort = Sorts.silver;
-        silverCounter++;
-      } else if((athletes[i].tournaments * pointsPerTournament + athletes[i].trainings) >= minimums[Sorts.bronze]) {
-        athletes[i].nftSort = Sorts.bronze;  
-        bronzeCounter++;
-      }
-      athletes[i].nftSort = Sorts.white;
-      whiteCounter++;    
-        
-      emit updatedNftSort(athletes[i].athleteId, athletes[i].nftSort);
-    }  
-  }
-  
-  //Call the mint function from the TennisNFT contract
-  // to batch mint NFT based on the count per NFT sort.  
-  function batchMint() private {
-    mint(msg.sender, WHITE, whiteCounter);
-    mint(msg.sender, BRONZE, bronzeCounter);
-    mint(msg.sender, SILVER, silverCounter);
-    mint(msg.sender, GOLD, goldCounter);
-  }
-
-  // Reset function clears records from the last season and the 
-  // NFT to white. For the time when the NFT was succesfully minted 
-  function resetRecords() private {
-    for (uint i; i < athletes.length; i++) {
-      // Delete records in the athletes array
-      athletes[i].tournaments = 0;
-      athletes[i].trainings = 0;
-      // Set NFT sort to white
-      athletes[i].nftSort = Sorts.white;
-    }  
-  }
-
-  // Clear the NFT counters after minting the season's NFTs
-  function resetCounters() private {
-    whiteCounter = 0;
-    bronzeCounter = 0;
-    silverCounter = 0;
-    goldCounter = 0;
-  }
-
-  // It goes through each athlete data and tranfers him 1 NFT
-  function transferAll() private {
-    for (uint i; i < athletes.length; i++) {
-    transferNFT(msg.sender, athletes[i].athleteWallet, uint(athletes[i].nftSort), 1);
+  // It mint the NFT, reset the athlete records
+  function mintAndResetRecords() external onlyOwner{
+    for(uint i = 0; i < idCounter; i++ ){
+      singleMint(i);
+      resetRecords(i);
     }
-  }  
+  }
+  
+  //Call the mint function from the TennisNFT contract.  
+  function singleMint(uint _athletesIndex) private {
+    mint(athletes[_athletesIndex].athleteWallet, uint(athletes[_athletesIndex].nftSort), 1);
+    emit Minted(_athletesIndex + 1, athletes[_athletesIndex].nftSort);
+  }
+
+  // Clears records and set NFT sort to white.
+  function resetRecords(uint _athletesIndex) private {
+      // Delete records in the athletes array
+      athletes[_athletesIndex].tournaments = 0;
+      athletes[_athletesIndex].trainings = 0;
+      // Set NFT sort to white
+      athletes[_athletesIndex].nftSort = Sorts.white; 
+  }
 }
