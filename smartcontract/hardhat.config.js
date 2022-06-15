@@ -1,4 +1,5 @@
 require("@nomiclabs/hardhat-waffle");
+require("@nomiclabs/hardhat-etherscan");
 require('@openzeppelin/hardhat-upgrades');
 //Import your .env file here
 let secret = require("./secret.json");
@@ -26,5 +27,8 @@ module.exports = {
       url: secret.url,
       accounts: [`0x${secret.key}`]
     }
+  },
+  etherscan: {
+    apiKey: secret.etherscan_api
   }
 };

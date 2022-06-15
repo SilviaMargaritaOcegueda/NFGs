@@ -4,7 +4,7 @@ async function main(){
     const [deployer] = await ethers.getSigners();
     const TennisNFT = await ethers.getContractFactory("TennisNFT");
     const tennisNFT = await TennisNFT.deploy();
-    console.log("TennisNFT Address is : ", tennisNFT.address);
+    console.log("TennisNFT is deployed at this Contract Address : ", tennisNFT.address);
 }
 
 main()
