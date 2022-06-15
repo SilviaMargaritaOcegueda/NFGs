@@ -5,7 +5,7 @@ import { Button } from 'react-bootstrap'
 import AthleteList from './Athlete/AthleteList';
 import AddAthlete from './Athlete/AddAthlete';
 import Mint from './Mint/Mint';
-
+//import CONTRACT_ABI from Club.json
 
 function App() {
     
@@ -15,7 +15,8 @@ function App() {
   const [accounts, setAccounts] = useState(0)
   // to conncet with meta mask
   const [isConnected, setIsConnected] = useState(false)
-  
+  const CONTRACT_ADDRESS = "0xcDCa1E4136ea3992d46a9A293a51eD0C3505115d";
+
   const isConnceted = Boolean(accounts[0]);
   async function connectAccount(){
     // check if meta mask is there
@@ -32,6 +33,10 @@ function App() {
 
   useEffect(() => {
     const data = []
+    // const contract = new web3.eth.Contract(CONTRACT_ABI, CONTRACT_ADDRESS); //Copy-paste the contract ABI
+    // if (window.etherum) {
+
+    // }
     data.push({athleteName: "Gandalf", tournamentsPlayed: 10, numberOfPoints: 300, walletAddress: 'asdasdasdasd', athleteId: '100'})
     data.push({athleteName: "Saruman", tournamentsPlayed: 5, numberOfPoints: 100, walletAddress: 'jhgjgjhgjhgjh', athleteId: '100'})
 
