@@ -1,0 +1,7 @@
+{
+    "cSpell.words": [
+        "nomiclabs"
+    ],
+    "solidity.compileUsingRemoteVersion": "latest",
+    "git.ignoreLimitWarning": true
+}

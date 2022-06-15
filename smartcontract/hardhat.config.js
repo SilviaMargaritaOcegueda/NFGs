@@ -1,5 +1,7 @@
 require("@nomiclabs/hardhat-waffle");
+require('@openzeppelin/hardhat-upgrades');
 require('dotenv').config();
+require("@nomiclabs/hardhat-ethers");
 // to check transaction on etherscan import it
 //  it is 'like' the remix frontend and you can see all implemented functionality
 require("@nomiclabs/hardhat-etherscan");
@@ -22,7 +24,8 @@ task("accounts", "Prints the list of accounts", async (taskArgs, hre) => {
  */
 module.exports = {
   solidity: "0.8.2",
-  defaultNetwork: "rinkeby",
+
+  defaultNetwork: "hardhat",
   networks: {
     hardhat: {
     },
