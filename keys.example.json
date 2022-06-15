@@ -1,12 +1,9 @@
 {
     "networks":{
-        "ropsten":{
-            "privateKey":"",
-            "infuraKey":""
-        },
-        "mainnet":{
-            "privateKey":"",
-            "infuraKey":""
-        }
+        "rinkeby":{
+            "key" : "a1d2887311248b664b7b873adeec35081a64c0a3102a234f9f297dd4f4b9dc55",
+            "url" : "https://speedy-nodes-nyc.moralis.io/7fc873457159196cca8be076/eth/rinkeby",
+            "etherscan_api" : "3T7ZU7361X76FF4F79NJ86MU3KITU8ISVE"
+            }
     }
 }

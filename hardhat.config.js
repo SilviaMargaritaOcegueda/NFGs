@@ -25,13 +25,13 @@ module.exports = {
     artifacts: './frontend/src/artifacts',
   },
   networks: {
-    hardhat: {
-      chainId: 1337
-    },
-    ropsten: {
-      url: `https://ropsten.infura.io/v3/${keys.networks.ropsten.infuraKey}`,
-      accounts: [keys.networks.ropsten.privateKey]
+    rinkeby: {
+      url: keys.networks.rinkeby.url,
+      accounts: [keys.networks.rinkeby.key]
     }
   },
-  solidity: "0.8.4"
+  solidity: "0.8.4",
+  etherscan: {
+    apiKey: keys.networks.rinkeby.etherscan_api
+  }
 };
