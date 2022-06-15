@@ -72,7 +72,7 @@ contract Club is AthleteRegistration, TennisNFT {
     }    
   }
 
-  // It mint the NFT, reset the athlete records
+  // It mints the NFT and reset the athlete records for each athlete.
   function mintAndResetRecords() external onlyOwner{
     for(uint i = 0; i < idCounter; i++ ){
       singleMint(i);
