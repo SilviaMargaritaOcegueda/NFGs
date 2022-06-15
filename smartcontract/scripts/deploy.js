@@ -1,18 +1,18 @@
 const { ethers } = require("hardhat");
 
 async function main(){
-    const [deployer] = await ethers.getSigners();
-    const TennisNFT = await ethers.getContractFactory("TennisNFT");
-    const tennisNFT = await TennisNFT.deploy();
-    console.log("TennisNFT Address is : ", tennisNFT.address);
+    // const [deployer] = await ethers.getSigners();
+    // const TennisNFT = await ethers.getContractFactory("TennisNFT");
+    // const tennisNFT = await TennisNFT.deploy();
+    // console.log("TennisNFT Address is : ", tennisNFT.address);
 
-    const AthleteRegistration = await ethers.getContractFactory("AthleteRegistration");
-    const athleteRegistration = await AthleteRegistration.deploy();
-    console.log("AthleteRegistration Address is : ", athleteRegistration.address);
+    // const AthleteRegistration = await ethers.getContractFactory("AthleteRegistration");
+    // const athleteRegistration = await AthleteRegistration.deploy();
+    // console.log("AthleteRegistration Address is : ", athleteRegistration.address);
 
     const Club = await ethers.getContractFactory("Club");
-    const club = await AthleteRegistration.deploy();
-    console.log("AthleteRegistration Address is : ", club.address);
+    const club = await Club.deploy(200,50);
+    console.log("Club Address is : ", club.address);
 }
 
 main()
