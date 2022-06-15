@@ -1,39 +1,34 @@
-import { Container, Alert } from 'react-bootstrap'
+import { Container } from 'react-bootstrap'
 import { useState, useEffect } from 'react'
+//import { ethers } from "ethers";
+import { Button } from 'react-bootstrap'
 import AthleteList from './Athlete/AthleteList';
 import AddAthlete from './Athlete/AddAthlete';
 import Mint from './Mint/Mint';
 
+
 function App() {
+    
 
   const [athletes, setAthletes] = useState([])
   const [accouts, setAccouts] = useState([])
   const [accounts, setAccounts] = useState(0)
+  // to conncet with meta mask
   const [isConnected, setIsConnected] = useState(false)
-
-  useEffect(() => {
-    // setting isConnceted to 0 for not connected to wallet
-    const isConnceted = Boolean(accounts[0]);
-    /// Do the Fox work
-    async function connectAccount(){
-        // check if meta mask is there
-        if (window.ethereum) {
-            // grab accounts that comes from the meta mask (all of them)
-            const accounts = await window.ethereum.request({
-                method: "eth_requestAccounts",
-            })
-            // set accounts to accounts from meta mask
-            setIsConnected(accounts)
-        }
+  
+  const isConnceted = Boolean(accounts[0]);
+  async function connectAccount(){
+    // check if meta mask is there
+    if (window.ethereum) {
+        // grab accounts that comes from the meta mask (all of them)
+        const accounts = await window.ethereum.request({
+            method: "eth_requestAccounts",
+        })
+        // set accounts to accounts from meta mask
+        setAccounts(accounts)
+        //console.log("This are the accounts from meta mask", accounts)
     }
-    const connected = true
-    return () => {
-      
-      setAccouts(["test"]);
-      setIsConnected(connected)
-      console.log(isConnected)
-    }
-  }, [])
+}
 
   useEffect(() => {
     const data = []
@@ -70,14 +65,16 @@ function App() {
 
   return (
     <Container>
+        <div class="text-center">
         {isConnceted ? (
-            <p>Connected</p>
-        ) : (
-            <button onClick={connectAccount}>Connected</button>
-         )}
+                <p>Connected</p>
+                ) : (
+                <Button style={{width: '100%'}} onClick={(e) => {
+                    connectAccount()}}>Conncet Wallet</Button>
+                    )}
+        </div>
       <div style={{textAlign: 'center'}}>Tennis NFT</div>
       <div style={{textAlign: 'center'}}>Problem description</div>
-      <Alert variant="danger">Fox is not connected</Alert>
       <hr />
       <AthleteList athletes={athletes} refreshPlayer={refreshPlayer} />
       <hr />
