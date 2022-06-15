@@ -52,7 +52,18 @@ describe("TennisNFT", function(){
 
             //I have to pass the tokenId as second argument. Figuring out how to do it
             //console.log("Admin Address is ", admin.address);
-            
+    
+            const adminMintWhite = 1
+            await hardhatTennisNFT.mint(admin.address, whiteId, adminMintWhite);
+           //console.log("Admin White Mint", adminMintWhite);
+
+            const adminMintBronce = 2;
+            await hardhatTennisNFT.mint(admin.address, bronzeId, adminMintBronce);
+            const adminMintSilver = 3;
+            await hardhatTennisNFT.mint(admin.address, silverId, adminMintSilver);
+            const adminMintGold = 4;
+            await hardhatTennisNFT.mint(admin.address, goldId, adminMintGold);
+
             //Checking the number of tokens the owner has, in each tokenId
             const adminWhiteBalance = await hardhatTennisNFT.checkBalanceOf(admin.address, whiteId);
             //console.log("Number of White NFTs with the Admin is ", adminWhiteBalance);
@@ -63,11 +74,11 @@ describe("TennisNFT", function(){
             const adminGoldBalance = await hardhatTennisNFT.checkBalanceOf(admin.address, goldId);
             //console.log("Number of Gold NFTs with the Admin is ", adminGoldBalance);
 
-            //Checking if the total tokens minted during deployment is correct and is assigned to the owner
-            expect(await hardhatTennisNFT.whiteIdInitialCount()).to.equal(adminWhiteBalance);
-            expect(await hardhatTennisNFT.bronzeIdInitialCount()).to.equal(adminBronzeBalance);
-            expect(await hardhatTennisNFT.silverIdInitialCount()).to.equal(adminSilverBalance);
-            expect(await hardhatTennisNFT.goldIdInitialCount()).to.equal(adminGoldBalance);
+            //Checking if the total tokens minted during is correct and is assigned to the owner
+            expect(adminMintWhite).to.equal(adminWhiteBalance);
+            expect(adminMintBronce).to.equal(adminBronzeBalance);
+            expect(adminMintSilver).to.equal(adminSilverBalance);
+            expect(adminMintGold).to.equal(adminGoldBalance);
         });
 
        
@@ -78,6 +89,15 @@ describe("TennisNFT", function(){
          //Test Case - 3
          it("Should transfer NFTs from the admin to the players", async function(){
             
+            const adminMintWhite = 1
+            await hardhatTennisNFT.mint(admin.address, whiteId, adminMintWhite);
+            const adminMintBronce = 1;
+            await hardhatTennisNFT.mint(admin.address, bronzeId, adminMintBronce);
+            const adminMintSilver = 1;
+            await hardhatTennisNFT.mint(admin.address, silverId, adminMintSilver);
+            const adminMintGold = 1;
+            await hardhatTennisNFT.mint(admin.address, goldId, adminMintGold);
+
             //Transfer 1 white NFT from owner address to player
             await hardhatTennisNFT.transferNFT(admin.address, player.address, whiteId, 1)
             expect(await hardhatTennisNFT.checkBalanceOf(player.address, whiteId)).to.equal(1);
@@ -98,6 +118,8 @@ describe("TennisNFT", function(){
         //Test Case - 4
         it("Should fail if sender does not have enough tokens", async function(){
             //Initially Admin has all tokens and Player has 0 tokens
+            const adminMintWhite = 1
+            await hardhatTennisNFT.mint(admin.address, whiteId, adminMintWhite);
             const initialPlayerBalance = await hardhatTennisNFT.checkBalanceOf(player.address, whiteId);
             const initialAdminBalance = await hardhatTennisNFT.checkBalanceOf(admin.address, whiteId);
             assert(initialAdminBalance >= 1, 'Not enough Tokens');
@@ -107,6 +129,8 @@ describe("TennisNFT", function(){
 
         //Test Case - 5
         it("Should update balances after Transfer", async function(){
+            const adminMintWhite = 2
+            await hardhatTennisNFT.mint(admin.address, whiteId, adminMintWhite);
             const initialPlayerBalance = await hardhatTennisNFT.checkBalanceOf(player.address, whiteId);
             const initialPlayer2Balance = await hardhatTennisNFT.checkBalanceOf(player2.address, whiteId);
             const initialAdminBalance = await hardhatTennisNFT.checkBalanceOf(admin.address, whiteId);
