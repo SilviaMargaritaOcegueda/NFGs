@@ -74,7 +74,7 @@ describe("TennisNFT", function(){
             const adminGoldBalance = await hardhatTennisNFT.checkBalanceOf(admin.address, goldId);
             //console.log("Number of Gold NFTs with the Admin is ", adminGoldBalance);
 
-            //Checking if the total tokens minted during deployment is correct and is assigned to the owner
+            //Checking if the total tokens minted during is correct and is assigned to the owner
             expect(adminMintWhite).to.equal(adminWhiteBalance);
             expect(adminMintBronce).to.equal(adminBronzeBalance);
             expect(adminMintSilver).to.equal(adminSilverBalance);
