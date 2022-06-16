@@ -11,7 +11,7 @@ async function main(){
     // console.log("AthleteRegistration Address is : ", athleteRegistration.address);
 
     const Club = await ethers.getContractFactory("Club");
-    const club = await Club.deploy(200,50);
+    const club = await Club.deploy(200,12);
     console.log("Club Address is : ", club.address);
 }
 
