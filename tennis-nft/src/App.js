@@ -1,11 +1,13 @@
 import { Container } from 'react-bootstrap'
 import { useState, useEffect } from 'react'
-//import { ethers } from "ethers";
+import { ethers } from "ethers";
 import { Button } from 'react-bootstrap'
 import AthleteList from './Athlete/AthleteList';
 import AddAthlete from './Athlete/AddAthlete';
 import Mint from './Mint/Mint';
+// import our contract json to use it for ABI
 import clubContract from './Club.json';
+const utils = ethers.utils
 
 function App() {
     
@@ -33,12 +35,26 @@ function App() {
 
   useEffect(() => {
     const data = []
+    const isConnceted = Boolean(accounts[0]);
     // check if meta mask is conncetd
-    if (window.etherum) {
-      const provider = new ethers.provider = new ethers.providers.Web3Provider(window.etherum);
-      const signer = provider.getSigners();
-      const contract = new ethers.Contract()
+    async function getAthletesFromClub() {
+      if (window.etherum) {
+        const provider = new ethers.providers.Web3Provider(window.etherum);
+        const signer = provider.getSigners();
+        const contract = new ethers.Contract(
+            CONTRACT_ADDRESS,
+            clubContract.abi,
+            signer
+        );
+        try {
+          const response = await contract.athletes();
+          console.log("response: ", response);
+        } catch (err) {
+          console.log("error: ", err)
+        }
+      }
     }
+    getAthletesFromClub();
     data.push({athleteName: "Gandalf", tournamentsPlayed: 10, numberOfPoints: 300, walletAddress: 'asdasdasdasd', athleteId: '100'})
     data.push({athleteName: "Saruman", tournamentsPlayed: 5, numberOfPoints: 100, walletAddress: 'jhgjgjhgjhgjh', athleteId: '100'})
 
@@ -49,9 +65,38 @@ function App() {
 
   let addAthlete = (athleteName, walletAddress) => {
     const data = []
-    data.push(...athletes) //pushes every single value from athletes to data array
-    data.push({athleteName: athleteName, tournamentsPlayed: 10, numberOfPoints: 300, walletAddress: walletAddress, athleteId: '100'})
-    setAthletes(data)
+    const isConnceted = Boolean(accounts[0]);
+    const athleteNameBytes32 = utils.formatBytes32String(athleteName);
+    console.log("atehlet name", athleteNameBytes32);
+    // check if meta mask is conncetd
+    async function setAthletesInClub() {
+      console.log("inside async setAthletesInClub");
+      if (window.etherum) {
+        const provider = new ethers.providers.Web3Provider(window.etherum);
+        const signer = provider.getSigners();
+        const contract = new ethers.Contract(
+            CONTRACT_ADDRESS,
+            clubContract.abi,
+            signer
+        );
+        try {
+          const response = await contract.registerAthlete(athleteNameBytes32, walletAddress, {
+            value: ethers.utils.parseEther(0.01),
+          });
+          console.log("response: ", response);
+          data.push(...athletes) //pushes every single value from athletes to data array
+          data.push({athleteName: athleteName, tournamentsPlayed: 0, numberOfPoints: 0, walletAddress: walletAddress, athleteId: '100'})
+          setAthletes(data)
+        } catch (err) {
+          console.log("error: ", err)
+        }
+      }
+    }
+    console.log("before async setAthletesInClub");
+    setAthletesInClub();
+    console.log("after async setAthletesInClub");
+
+    
   }
 
   let refreshPlayer = () => {
