@@ -26,8 +26,8 @@ contract Club is AthleteRegistration, TennisNFT {
   // Notifies that the records and NFT sort had been updated.
   event AthleteRecordsUpdated(uint athleteId, Sorts nftSort);
 
-  // Notifies NFT sort that has been minted for specific athlete.
-  event Minted(uint athletId, Sorts nftSort);
+  // Notifies how many NFTs has been minted.
+  event Minted(uint mintCount);
 
   constructor(uint32 _trainingsPerYear, uint32 _pointsPerTournament) {    
     setSeason(_trainingsPerYear, _pointsPerTournament);
@@ -74,16 +74,22 @@ contract Club is AthleteRegistration, TennisNFT {
 
   // It mints the NFT and reset the athlete records for each athlete.
   function mintAndResetRecords() external onlyOwner{
+    require(idCounter > 0, "Zero athletes enrolled");
+    uint mintCount;
+    //This is inefficient because we can run out of gas if the idCounter 
+    // limit is too large. However, we didn't find a better way to iterate 
+    // over the athletes array besides the loop.
     for(uint i = 0; i < idCounter; i++ ){
       singleMint(i);
+      mintCount++;
       resetRecords(i);
     }
+    emit Minted(mintCount);
   }
   
   //Call the mint function from the TennisNFT contract.  
   function singleMint(uint _athletesIndex) private {
     mint(athletes[_athletesIndex].athleteWallet, uint(athletes[_athletesIndex].nftSort), 1);
-    emit Minted(_athletesIndex + 1, athletes[_athletesIndex].nftSort);
   }
 
   // Clears records and set NFT sort to white.
