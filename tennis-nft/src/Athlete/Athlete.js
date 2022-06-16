@@ -3,6 +3,7 @@ import { Row, Col, Form, Button } from 'react-bootstrap'
 import { useState } from 'react'
 import { ethers } from 'ethers';
 import clubContract from '../Club.json';
+const BigNumber = ethers.BigNumber;
 
 function Athlete(props) {
 
@@ -14,6 +15,9 @@ function Athlete(props) {
     let addData = () => {
         //send data to wallet
         console.log("Value of ID", props.athleteData.athleteId);
+        const _id = BigNumber.from(props.athleteData.athleteId);
+        const _addTurnamentsPlayed = addTurnamentsPlayed;
+        const _addPoints = addPoints;
         async function incrementRecords() {
             const {ethereum} = window
               if (ethereum) {
@@ -29,8 +33,9 @@ function Athlete(props) {
                 });
                 console.log("This is the formated event number", athelteIdFromContract )
                 try {
-                  const response = await contract.incrementRecords(props.athleteData.athleteId, addTurnamentsPlayed, addPoints);                 
+                  const response = await contract.incrementRecords(_id, _addTurnamentsPlayed, _addPoints);                 
                   await response.wait()
+                  props.refreshPlayer()
                   console.log("response: ", response);
                 } catch (err) {
                   console.log("error: ", err)
@@ -43,7 +48,7 @@ function Athlete(props) {
         // check if "" is the same as 0 -> if not -> add function emptyStringToZero
         setAddTurnamentsPlayed("")
         setAddPoints("")
-        props.refreshPlayer()
+        
     }
 
     return (

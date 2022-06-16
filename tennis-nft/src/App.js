@@ -78,7 +78,7 @@ function App() {
     //data.push({athleteName: "Gandalf", tournamentsPlayed: 10, numberOfPoints: 300, walletAddress: 'asdasdasdasd', athleteId: '100'})
     //data.push({athleteName: "Saruman", tournamentsPlayed: 5, numberOfPoints: 100, walletAddress: 'jhgjgjhgjhgjh', athleteId: '100'})
 
-    console.log(result)
+    //console.log(result)
     return () => {
       setAthletes(data)
     }
@@ -130,12 +130,51 @@ function App() {
   }
 
   let refreshPlayer = () => {
+
     const data = []
-    data.push({athleteName: "Gandalf", tournamentsPlayed: 11, numberOfPoints: 3000, walletAddress: 'asdasdasdasd', athleteId: '100'})
-    data.push({athleteName: "Saruman", tournamentsPlayed: 6, numberOfPoints: 30, walletAddress: 'jhgjgjhgjhgjh', athleteId: '100'})
+    async function refreshPlayerIncrements() {
+      const {ethereum} = window
+      console.log("Refresh player wird aufgerufen")
+      if (ethereum) {
+        console.log("In window")
+        const provider = new ethers.providers.Web3Provider(ethereum);
+        console.log("Here are the providers", provider);
+        const signer = provider.getSigner();
+        const contract = new ethers.Contract(
+            CONTRACT_ADDRESS,
+            clubContract.abi,
+            signer
+        );
+        try {
+          const counterAtheltes = await contract.idCounter();
+          console.log("das sien die Athelten im contract:", counterAtheltes);
+          for (let i = 0; i < counterAtheltes; i++) {
+            const response = await contract.athletes(i);
+            let _athelteId = (response[0]).toNumber();
+            let _athelteName = utils.parseBytes32String(response[1]);
+            let _walletAddress = response[2];
+            let _tournaments = response[4];
+            let _trainings = response[5];
+            data.push({athleteName: _athelteName, tournamentsPlayed: _tournaments, numberOfPoints: _trainings, walletAddress: _walletAddress, athleteId: _athelteId})
+            console.log("response: ", response);
+          }
+          console.log(data);
+          console.log("Setting data in Frontend: ");
+          setAthletes(data)
+
+          
+        } catch (err) {
+          console.log("error: ", err)
+        }
+      }
+    }
+    const result = refreshPlayerIncrements()
+      .catch(console.error);
+    //data.push({athleteName: "Gandalf", tournamentsPlayed: 11, numberOfPoints: 3000, walletAddress: 'asdasdasdasd', athleteId: '100'})
+    //data.push({athleteName: "Saruman", tournamentsPlayed: 6, numberOfPoints: 30, walletAddress: 'jhgjgjhgjhgjh', athleteId: '100'})
     //reload atheletes from fox
     //data.push(fox data)
-    setAthletes(data)
+    //setAthletes(data)
 
   }
 
