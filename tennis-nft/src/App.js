@@ -5,7 +5,7 @@ import { Button } from 'react-bootstrap'
 import AthleteList from './Athlete/AthleteList';
 import AddAthlete from './Athlete/AddAthlete';
 import Mint from './Mint/Mint';
-//import CONTRACT_ABI from Club.json
+import clubContract from './Club.json';
 
 function App() {
     
@@ -33,10 +33,12 @@ function App() {
 
   useEffect(() => {
     const data = []
-    // const contract = new web3.eth.Contract(CONTRACT_ABI, CONTRACT_ADDRESS); //Copy-paste the contract ABI
-    // if (window.etherum) {
-
-    // }
+    // check if meta mask is conncetd
+    if (window.etherum) {
+      const provider = new ethers.provider = new ethers.providers.Web3Provider(window.etherum);
+      const signer = provider.getSigners();
+      const contract = new ethers.Contract()
+    }
     data.push({athleteName: "Gandalf", tournamentsPlayed: 10, numberOfPoints: 300, walletAddress: 'asdasdasdasd', athleteId: '100'})
     data.push({athleteName: "Saruman", tournamentsPlayed: 5, numberOfPoints: 100, walletAddress: 'jhgjgjhgjhgjh', athleteId: '100'})
 
