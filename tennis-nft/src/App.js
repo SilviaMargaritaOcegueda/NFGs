@@ -29,7 +29,7 @@ function App() {
         })
         // set accounts to accounts from meta mask
         setAccounts(accounts)
-        //console.log("This are the accounts from meta mask", accounts)
+        console.log("This are the accounts from meta mask", accounts)
     }
 }
 
@@ -65,32 +65,37 @@ function App() {
 
   let addAthlete = (athleteName, walletAddress) => {
     const data = []
-    const isConnceted = Boolean(accounts[0]);
+    //const isConnceted = Boolean(accounts[0]);
     const athleteNameBytes32 = utils.formatBytes32String(athleteName);
     console.log("atehlet name", athleteNameBytes32);
     // check if meta mask is conncetd
     async function setAthletesInClub() {
       console.log("inside async setAthletesInClub");
-      if (window.etherum) {
-        const provider = new ethers.providers.Web3Provider(window.etherum);
-        const signer = provider.getSigners();
-        const contract = new ethers.Contract(
-            CONTRACT_ADDRESS,
-            clubContract.abi,
-            signer
-        );
-        try {
-          const response = await contract.registerAthlete(athleteNameBytes32, walletAddress, {
-            value: ethers.utils.parseEther(0.01),
-          });
-          console.log("response: ", response);
-          data.push(...athletes) //pushes every single value from athletes to data array
-          data.push({athleteName: athleteName, tournamentsPlayed: 0, numberOfPoints: 0, walletAddress: walletAddress, athleteId: '100'})
-          setAthletes(data)
-        } catch (err) {
-          console.log("error: ", err)
+
+      console.log("inside async setAthletesInClub accounts", accounts);
+      const {ethereum} = window
+        if (ethereum) {
+          console.log("inside if")
+          const provider = new ethers.providers.Web3Provider(ethereum);
+          const signer = provider.getSigners();
+          const contract = new ethers.Contract(
+              CONTRACT_ADDRESS,
+              clubContract.abi,
+              signer
+          );
+          try {
+            const response = await contract.registerAthlete(athleteNameBytes32, walletAddress, {
+              value: ethers.utils.parseEther((0.01).toString()),
+            });
+            await response.wait()
+            console.log("response: ", response);
+            data.push(...athletes) //pushes every single value from athletes to data array
+            data.push({athleteName: athleteName, tournamentsPlayed: 0, numberOfPoints: 0, walletAddress: walletAddress, athleteId: '100'})
+            setAthletes(data)
+          } catch (err) {
+            console.log("error: ", err)
+          }
         }
-      }
     }
     console.log("before async setAthletesInClub");
     setAthletesInClub();
