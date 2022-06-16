@@ -1,10 +1,13 @@
-import { Container } from 'react-bootstrap'
+import { Container, Col, Row } from 'react-bootstrap'
 import { useState, useEffect } from 'react'
 import { ethers } from 'ethers';
 import { Button } from 'react-bootstrap'
 import AthleteList from './Athlete/AthleteList';
 import AddAthlete from './Athlete/AddAthlete';
 import Mint from './Mint/Mint';
+import './App.css'
+import logo from './tennis.png'
+
 // import our contract json to use it for ABI
 import clubContract from './Club.json';
 const utils = ethers.utils;
@@ -206,24 +209,34 @@ function App() {
   }
 
   return (
-    <Container>
-        <div className="text-center">
+    <Container fluid className='App'>
+    <Container className='App-container'>
+      <Row><Col xs={10}>&nbsp;</Col></Row>
+      <Row>
+        <Col xs={4}>
+          <img src={logo} className="App-logo" alt="logo" />
+        </Col>
+        <Col xs={6}>&nbsp;</Col>
+        <Col xs={2}>
+       
         {isConnceted ? (
                 <p>Connected</p>
                 ) : (
-                <Button style={{width: '100%'}} onClick={(e) => {
+                <Button variant="primary" style={{width: '100%', backgroundColor: "#5c2dbf", borderColor: "#303030"}} onClick={(e) => {
                     connectAccount()}}>Conncet Wallet</Button>
                     )}
-        </div>
-      <div style={{textAlign: 'center'}}>Tennis NFT</div>
-      <div style={{textAlign: 'center'}}>Problem description</div>
+
+        </Col>
+      </Row>
+      <div style={{textAlign: 'center'}}> <h1>AMATEUR ATHLETES NFTs</h1></div>
+      <div style={{textAlign: 'center'}}> <h2>Reward athletes like a pro</h2></div>
       <hr />
-      <AthleteList athletes={athletes} refreshPlayer={refreshPlayer} />
+      <AddAthlete addAthlete={addAthlete} />
       <hr />
       <Mint mintBatch={mintBatch}/>
       <hr />
-      <AddAthlete addAthlete={addAthlete} />
-      
+      <AthleteList athletes={athletes} refreshPlayer={refreshPlayer} />
+      </Container>
     </Container>
   );
 }

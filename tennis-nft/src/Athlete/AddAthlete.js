@@ -14,33 +14,29 @@ function AddAthlete(props) {
                 <Form.Label htmlFor="athleteName">Name</Form.Label>
                 <Form.Control
                     type="text"
-                    placeholder="Hans Wurst"
+                    placeholder="Enter the name of the athlete"
                     id="athleteName"
-                    aria-describedby="Name of Athlete"
                     value={athleteName}
                     onChange={(e) => setAthleteName(e.target.value)}
                 />
                 <Form.Text id="athleteNameText" muted>
-                    Enter the name of an athlete.
                 </Form.Text>
                 </Col>
-                <Col xs={3}>
-                <Form.Label htmlFor="walletAddress">Wallet address of athlete</Form.Label>
+                <Col xs={4}>
+                <Form.Label htmlFor="walletAddress">Wallet address</Form.Label>
                 <Form.Control
                     type="text"
-                    placeholder="1bZUbklDGhuilHUliWZseasAhKhASAZ"
+                    placeholder="Enter athlete's Metamask wallet address"
                     id="walletAddress"
-                    aria-describedby="Wallet Adresse"
                     value={walletAddress}
                     onChange={(e) => setWalletAddress(e.target.value)}            
                 />
                 <Form.Text id="walletAddressText" muted>
-                    Enter the Wallet-Address
                 </Form.Text>
                 </Col>
-                <Col xs={4}>&nbsp;</Col>
+                <Col xs={3}>&nbsp;</Col>
                 <Col xs={2}>
-                <Button variant="primary" style={{width: '100%'}} onClick={(e) => {
+                <Button variant="primary" style={{width: '100%', backgroundColor: "#5c2dbf" , borderColor: "#303030"}} onClick={(e) => {
                     props.addAthlete(athleteName, walletAddress)
                     setAthleteName("")
                     setWalletAddress("")

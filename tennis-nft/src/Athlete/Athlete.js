@@ -53,11 +53,15 @@ function Athlete(props) {
 
     return (
         <div>
-            <div><b>{props.athleteData.athleteName}</b></div>
+            <Row>
+                <Col xs={3}><b>{props.athleteData.athleteName}</b></Col>
+                <Col xs={2}></Col>
+                <Col xs={3}>Increase attendance records</Col>
+            </Row>
             <Row>
                 <Col xs={3}>Tournaments played</Col>
-                <Col xs={1}>{props.athleteData.tournamentsPlayed}</Col>
-                <Col xs={2}>
+                <Col xs={2}>{props.athleteData.tournamentsPlayed}</Col>
+                <Col xs={3}>
                 <Form.Control
                     type="number"
                     placeholder="10"
@@ -69,9 +73,9 @@ function Athlete(props) {
                 </Col>
             </Row>
             <Row>
-                <Col xs={3}>Number of Points</Col>
-                <Col xs={1}>{props.athleteData.numberOfPoints}</Col>
-                <Col xs={2}>
+                <Col xs={3}>Training Sessions</Col>
+                <Col xs={2}>{props.athleteData.numberOfPoints}</Col>
+                <Col xs={3}>
                     <Form.Control
                         type="number"
                         placeholder="10"
@@ -83,10 +87,10 @@ function Athlete(props) {
                 </Col>
             </Row>
             <Row>
-                <Col xs={3}>Athlete ID</Col>
-                <Col xs={1}>{props.athleteData.athleteId}</Col>
-                <Col xs={2}>
-                    <Button variant="primary" style={{width: '100%'}} onClick={(e) => addData()}>Add Values</Button>
+                <Col xs={3}>ID</Col>
+                <Col xs={2}>{props.athleteData.athleteId}</Col>
+                <Col xs={3}>
+                    <Button variant="primary" style={{width: '100%', backgroundColor: "#5c2dbf" , borderColor: "#303030"}} onClick={(e) => addData()}>Add Values</Button>
                 </Col>
             </Row>
         </div>
