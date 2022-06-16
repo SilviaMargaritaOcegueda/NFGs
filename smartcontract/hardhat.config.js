@@ -29,10 +29,10 @@ module.exports = {
   networks: {
     hardhat: {
     },
-    // rinkeby: {
-    //   url: API_URL_RINKEBY,
-    //   accounts: [PRIVATE_KEY]
-    // }
+    rinkeby: {
+      url: API_URL_RINKEBY,
+      accounts: [PRIVATE_KEY]
+    }
   },
   etherscan: {
     apiKey: API_URL_ETHERSCAN,
