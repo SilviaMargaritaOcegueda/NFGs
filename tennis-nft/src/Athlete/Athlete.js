@@ -1,16 +1,45 @@
 import React from 'react'
 import { Row, Col, Form, Button } from 'react-bootstrap'
 import { useState } from 'react'
+import { ethers } from 'ethers';
+import clubContract from '../Club.json';
 
 function Athlete(props) {
 
     const [addTurnamentsPlayed, setAddTurnamentsPlayed] = useState()
     const [addPoints, setAddPoints] = useState()
 
+    const CONTRACT_ADDRESS = "0x5cd66afD0E38E60Dbfc8e9bBa7fa081A65E208c5";
+
     let addData = () => {
         //send data to wallet
+        console.log("Value of ID", props.athleteData.athleteId);
+        async function incrementRecords() {
+            const {ethereum} = window
+              if (ethereum) {
+                console.log("inside if")
+                const provider = new ethers.providers.Web3Provider(ethereum);
+                const signer = provider.getSigner();
+                const contract = new ethers.Contract(
+                    CONTRACT_ADDRESS,
+                    clubContract.abi,
+                    signer
+                );
+                const athelteIdFromContract = contract.on("AthleteRecordsUpdated", (athleteId, event) => {
+                });
+                console.log("This is the formated event number", athelteIdFromContract )
+                try {
+                  const response = await contract.incrementRecords(props.athleteData.athleteId, addTurnamentsPlayed, addPoints);                 
+                  await response.wait()
+                  console.log("response: ", response);
+                } catch (err) {
+                  console.log("error: ", err)
+                }
+              }
+          }
         // --> addTurnamentsPlayed
         // --> addPoints
+        incrementRecords();
         // check if "" is the same as 0 -> if not -> add function emptyStringToZero
         setAddTurnamentsPlayed("")
         setAddPoints("")
