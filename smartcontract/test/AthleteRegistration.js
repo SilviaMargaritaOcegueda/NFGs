@@ -28,7 +28,7 @@ describe("AthleteRegistration", function(){
         //Deploy this instance
         hardhatAthleteRegistration = await AthleteRegistration.deploy();
 
-        //Retrieving the tokenID from Contract
+        //Retrieving the athletes Id from Contract
         athletesId = await (hardhatAthleteRegistration.connect(admin).idCounter());
         //const minimum = await club.connect(signer1).miminums(1)
         console.log("Show number of athletesID", athletesId);
@@ -62,7 +62,7 @@ describe("AthleteRegistration", function(){
         
 
         it("It should check that a walletaddress can't exists two times", async function(){
-            // Test case 4 Checks if a wallet address can only be registerd one time
+            // Error test case 4 Checks if a wallet address can only be registerd one time
             const stringInBytes = utils.formatBytes32String("Test")
             await hardhatAthleteRegistration.registerAthlete(stringInBytes, player.address);
             await expect(hardhatAthleteRegistration.registerAthlete(stringInBytes, player.address)).to.be.reverted;
