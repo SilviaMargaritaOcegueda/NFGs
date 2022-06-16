@@ -1,6 +1,6 @@
 import { Container } from 'react-bootstrap'
 import { useState, useEffect } from 'react'
-import { ethers } from "ethers";
+import { ethers } from 'ethers';
 import { Button } from 'react-bootstrap'
 import AthleteList from './Athlete/AthleteList';
 import AddAthlete from './Athlete/AddAthlete';
@@ -121,7 +121,34 @@ function App() {
   }
 
   let mintBatch = () => {
-    
+    async function handleMint(){
+      // if meta mask wallet is connctected
+      if (window.ethereum) {
+        const provider = new ethers.providers.Web3Provider(window.ethereum);
+        const signer = provider.getSigner();
+        const contract = new ethers.Contract(
+            CONTRACT_ADDRESS,
+            clubContract.abi,
+            signer
+        );
+          try {
+              // here we can call the function for minting 
+              //(name of the function used in our contract!! 
+              //including parameters we dont have for mint and transfer)
+              //to receive a respones
+              // if we have numer as input it must be of kind bignumber
+              const response = await contract.mintAndResetRecords();
+              await response.wait()
+              console.log('response:', response);
+          } catch (err) {
+              console.log("error", err )
+          }
+      }
+      
+    }
+    console.log("before async handleMint");
+    handleMint();
+    console.log("after async handleMint");
     //do the magic
     console.log("Test")
     //refreshPlayer()
