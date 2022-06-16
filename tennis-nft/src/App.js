@@ -173,11 +173,6 @@ function App() {
     }
     const result = refreshPlayerIncrements()
       .catch(console.error);
-    //data.push({athleteName: "Gandalf", tournamentsPlayed: 11, numberOfPoints: 3000, walletAddress: 'asdasdasdasd', athleteId: '100'})
-    //data.push({athleteName: "Saruman", tournamentsPlayed: 6, numberOfPoints: 30, walletAddress: 'jhgjgjhgjhgjh', athleteId: '100'})
-    //reload atheletes from fox
-    //data.push(fox data)
-    //setAthletes(data)
 
   }
 

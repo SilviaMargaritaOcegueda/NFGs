@@ -64,7 +64,7 @@ function Athlete(props) {
                 <Col xs={3}>
                 <Form.Control
                     type="number"
-                    placeholder="10"
+                    placeholder="Add value"
                     id="addTurnaments"
                     aria-describedby="Add Turnaments"
                     value={addTurnamentsPlayed}
@@ -78,7 +78,7 @@ function Athlete(props) {
                 <Col xs={3}>
                     <Form.Control
                         type="number"
-                        placeholder="10"
+                        placeholder="Add value"
                         id="addPoints"
                         aria-describedby="Add Points"
                         value={addPoints}
@@ -90,7 +90,7 @@ function Athlete(props) {
                 <Col xs={3}>ID</Col>
                 <Col xs={2}>{props.athleteData.athleteId}</Col>
                 <Col xs={3}>
-                    <Button variant="primary" style={{width: '100%', backgroundColor: "#5c2dbf" , borderColor: "#303030"}} onClick={(e) => addData()}>Add Values</Button>
+                    <Button variant="primary" style={{width: '100%', backgroundColor: "#5c2dbf" , borderColor: "#303030"}} onClick={(e) => addData()}>Save</Button>
                 </Col>
             </Row>
         </div>
