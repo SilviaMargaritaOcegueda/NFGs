@@ -33,7 +33,7 @@ describe("Club", function(){
         // Register the first athlete 
         const nameInBytes = utils.formatBytes32String("Alan")
         await hardhatClub.registerAthlete(nameInBytes,athlete.address);
-        // console.log("First athlete registered");
+        
     });
     
     //Write your test cases within this sub test-suite
@@ -60,18 +60,20 @@ describe("Club", function(){
         it("Should set the right minimum number of attendances for each sort of NFT", async function(){
 
             
-            //Checking the number of trainnings each sort of NFT set
+            //Check the right number of trainnings set for each sort of NFT
+            //Checking if the calculation of minimums is right
             const goldMinimum = await (hardhatClub.connect(admin).minimums(3));
+            expect(goldMinimum).to.equal(216);
             console.log("Gold NFT -> min. of trainings attendance is 90%: ", goldMinimum);
+            
             const silverMinimum = await (hardhatClub.connect(admin).minimums(2));
+            expect(silverMinimum).to.equal(168);
             console.log("Silver NFT -> min. of trainings attendance is 70%: ", silverMinimum);
+            
             const bronzeMinimum = await (hardhatClub.connect(admin).minimums(1));
+            expect(bronzeMinimum).to.equal(144);
             console.log("Bronze NFT -> min. of trainings attendance is 60%", bronzeMinimum);
 
-            //Checking if the calculation of minimums is right
-            expect(goldMinimum).to.equal(216);
-            expect(silverMinimum).to.equal(168);
-            expect(bronzeMinimum).to.equal(144);
         });
     });
     
@@ -114,11 +116,14 @@ describe("Club", function(){
     describe("Testing the mint and reset records function", async function(){
         //Test Case 6
         it("Should emit the Minted event", async function(){
+            // Register the first athlete 
+            const nameInBytes2 = utils.formatBytes32String("Saul")
+            await hardhatClub.registerAthlete(nameInBytes2,athlete2.address);
             // Checks if the emited event consists of the expected variables
             await expect(hardhatClub.mintAndResetRecords())
                 .to.emit(hardhatClub, "Minted")
-                .withArgs(1, 0);
-            console.log("NFT minted");
+                .withArgs(2);
+            console.log("All NFT minted");
         });
         //Test Case 7
         it("Should reset athlete records and set NFT sort to white", async function(){
@@ -131,5 +136,11 @@ describe("Club", function(){
             expect(firstAthleteInc[5]).to.equal(0);
             console.log("All records are zero and NFT sort is white");
        });
+        //Test Case 8: Error test case
+        it("Should revert transaction when no athletes have been registered", async function(){
+            // Checks if the transaction is reverted
+            await hardhatClub.mintAndResetRecords();
+            expect(hardhatClub.mintAndResetRecords()).to.be.reverted;
+        });
     });    
 });
