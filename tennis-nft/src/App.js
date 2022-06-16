@@ -7,7 +7,8 @@ import AddAthlete from './Athlete/AddAthlete';
 import Mint from './Mint/Mint';
 // import our contract json to use it for ABI
 import clubContract from './Club.json';
-const utils = ethers.utils
+const utils = ethers.utils;
+const BigNumber = ethers.BigNumber;
 
 function App() {
     
@@ -17,7 +18,7 @@ function App() {
   const [accounts, setAccounts] = useState(0)
   // to conncet with meta mask
   const [isConnected, setIsConnected] = useState(false)
-  const CONTRACT_ADDRESS = "0xcDCa1E4136ea3992d46a9A293a51eD0C3505115d";
+  const CONTRACT_ADDRESS = "0x5cd66afD0E38E60Dbfc8e9bBa7fa081A65E208c5";
 
   const isConnceted = Boolean(accounts[0]);
   async function connectAccount(){
@@ -40,7 +41,8 @@ function App() {
     async function getAthletesFromClub() {
       if (window.etherum) {
         const provider = new ethers.providers.Web3Provider(window.etherum);
-        const signer = provider.getSigners();
+        console.log("Here are the providers", provider);
+        const signer = provider.getSigner();
         const contract = new ethers.Contract(
             CONTRACT_ADDRESS,
             clubContract.abi,
@@ -71,26 +73,30 @@ function App() {
     // check if meta mask is conncetd
     async function setAthletesInClub() {
       console.log("inside async setAthletesInClub");
-
-      console.log("inside async setAthletesInClub accounts", accounts);
+      // let exampleBignumer = BigNumber.from('2845823');
+      // let numberFromexampleBigNumber = exampleBignumer.toNumber();
+      // console.log("das ist eine bignumer",  numberFromexampleBigNumber);
+      // console.log("inside async setAthletesInClub accounts", accounts);
       const {ethereum} = window
         if (ethereum) {
           console.log("inside if")
           const provider = new ethers.providers.Web3Provider(ethereum);
-          const signer = provider.getSigners();
+          const signer = provider.getSigner();
           const contract = new ethers.Contract(
               CONTRACT_ADDRESS,
               clubContract.abi,
               signer
           );
+          const athelteIdFromContract = contract.on("NewAthlete", (athleteId, event) => {
+          });
+          console.log("This is the formated event number", athelteIdFromContract )
           try {
-            const response = await contract.registerAthlete(athleteNameBytes32, walletAddress, {
-              value: ethers.utils.parseEther((0.01).toString()),
-            });
+            const response = await contract.registerAthlete(athleteNameBytes32, walletAddress);
+            
             await response.wait()
             console.log("response: ", response);
             data.push(...athletes) //pushes every single value from athletes to data array
-            data.push({athleteName: athleteName, tournamentsPlayed: 0, numberOfPoints: 0, walletAddress: walletAddress, athleteId: '100'})
+            data.push({athleteName: athleteName, tournamentsPlayed: 0, numberOfPoints: 0, walletAddress: walletAddress, athleteId: 1})
             setAthletes(data)
           } catch (err) {
             console.log("error: ", err)
@@ -115,6 +121,7 @@ function App() {
   }
 
   let mintBatch = () => {
+    
     //do the magic
     console.log("Test")
     //refreshPlayer()
@@ -122,7 +129,7 @@ function App() {
 
   return (
     <Container>
-        <div class="text-center">
+        <div className="text-center">
         {isConnceted ? (
                 <p>Connected</p>
                 ) : (
