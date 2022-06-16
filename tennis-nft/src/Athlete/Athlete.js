@@ -21,7 +21,7 @@ function Athlete(props) {
         <div>
             <div><b>{props.athleteData.athleteName}</b></div>
             <Row>
-                <Col xs={3}>Turnaments played</Col>
+                <Col xs={3}>Tournaments played</Col>
                 <Col xs={1}>{props.athleteData.tournamentsPlayed}</Col>
                 <Col xs={2}>
                 <Form.Control

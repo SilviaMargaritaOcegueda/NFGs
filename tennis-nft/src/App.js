@@ -38,9 +38,14 @@ function App() {
     const data = []
     const isConnceted = Boolean(accounts[0]);
     // check if meta mask is conncetd
+    console.log("Vor der Async FUnction in useeffect")
     async function getAthletesFromClub() {
-      if (window.etherum) {
-        const provider = new ethers.providers.Web3Provider(window.etherum);
+      console.log("In use effect")
+      const {ethereum} = window
+
+      if (ethereum) {
+        console.log("In window")
+        const provider = new ethers.providers.Web3Provider(ethereum);
         console.log("Here are the providers", provider);
         const signer = provider.getSigner();
         const contract = new ethers.Contract(
@@ -49,17 +54,31 @@ function App() {
             signer
         );
         try {
-          const response = await contract.athletes();
-          console.log("response: ", response);
+          const counterAtheltes = await contract.idCounter();
+          console.log("das sien die Athelten im contract:", counterAtheltes);
+          for (let i = 0; i < counterAtheltes; i++) {
+            const response = await contract.athletes(i);
+            let _athelteId = (response[0]).toNumber();
+            let _athelteName = utils.parseBytes32String(response[1]);
+            let _walletAddress = response[2];
+            let _tournaments = response[4];
+            let _trainings = response[5];
+            data.push({athleteName: _athelteName, tournamentsPlayed: _tournaments, numberOfPoints: _trainings, walletAddress: _walletAddress, athleteId: _athelteId})
+            console.log("response: ", response);
+          }
+
+          
         } catch (err) {
           console.log("error: ", err)
         }
       }
     }
-    getAthletesFromClub();
-    data.push({athleteName: "Gandalf", tournamentsPlayed: 10, numberOfPoints: 300, walletAddress: 'asdasdasdasd', athleteId: '100'})
-    data.push({athleteName: "Saruman", tournamentsPlayed: 5, numberOfPoints: 100, walletAddress: 'jhgjgjhgjhgjh', athleteId: '100'})
+    const result = getAthletesFromClub()
+      .catch(console.error);
+    //data.push({athleteName: "Gandalf", tournamentsPlayed: 10, numberOfPoints: 300, walletAddress: 'asdasdasdasd', athleteId: '100'})
+    //data.push({athleteName: "Saruman", tournamentsPlayed: 5, numberOfPoints: 100, walletAddress: 'jhgjgjhgjhgjh', athleteId: '100'})
 
+    console.log(result)
     return () => {
       setAthletes(data)
     }
@@ -132,11 +151,6 @@ function App() {
             signer
         );
           try {
-              // here we can call the function for minting 
-              //(name of the function used in our contract!! 
-              //including parameters we dont have for mint and transfer)
-              //to receive a respones
-              // if we have numer as input it must be of kind bignumber
               const response = await contract.mintAndResetRecords();
               await response.wait()
               console.log('response:', response);
@@ -146,9 +160,7 @@ function App() {
       }
       
     }
-    console.log("before async handleMint");
     handleMint();
-    console.log("after async handleMint");
     //do the magic
     console.log("Test")
     //refreshPlayer()
