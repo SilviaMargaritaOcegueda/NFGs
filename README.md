@@ -18,17 +18,17 @@
 <p>Now you are probably asking yourself, how do you get our contracts on a test network, yes guessed right, we will explain that to you now: 
 first of all you need Meta Mask and Rinkeby. You can simply add Meta Mask to your browser. Then you need your private key. In this Youtube video you can find out how to get it, if you don't know:  https://www.youtube.com/watch?v=dSx14epF1lc</p>
 <p>If you want to see if our unit tests work for you then do the following:</p>
-<p>PRIVATE_KEY=""
-API_URL_RINKEBY=""
-NFT_STORAGE_API_KEY=""
-API_URL_ETHERSCAN=""</p>
+<p>PRIVATE_KEY=""</p>
+<p>API_URL_RINKEBY=""</p>
+<p>NFT_STORAGE_API_KEY=""</p>
+<p>API_URL_ETHERSCAN=""</p>
 <p>You have already found the private key in the meta mask, please enter it between the brackets at PRIVATE_KEY.</p>
 <p>You can create the API_URL_RINKEBY by following this tutorial https://docs.infura.io/infura/getting-started  up to and including point 3 3. Create a project on another network. Then copy the endpoint, which looks like this: https://rinkeby.infura.io/v3/d736914hfeqibf39873 into your variable.</p>
-<p>Now you need the NFT_STORAGE_API_KEY from the NFT storage. The easiest way is
-- go to https://nft.storage/
-- log in
-- click on API
-- click on New Api Key, give a project name e.g. Tennis NFT and create. Then you can copy the key from the interface into the API_URL_RINKEBY.</p>
+<p>Now you need the NFT_STORAGE_API_KEY from the NFT storage. The easiest way is:</p>
+<p>- go to https://nft.storage/</p>
+<p>- log in</p>
+<p>- click on API</p>
+<p>- click on New Api Key, give a project name e.g. Tennis NFT and create. Then you can copy the key from the interface into the API_URL_RINKEBY.</p>
 <p>Almost done. We are only missing the API_URL_ETHERSCAN. You can get it if you go to https://etherscan.io/. Log in on the top right and then click on API Keys in the bar on the left, which is currently located at Others. Again, create your own key by clicking on the "+ Add" button, assign project name and copy and paste the Api Key Token. Very good you dear ones. </p>
 <p>Another small addition our NFTs for this project are on ipfs. In the json files in the TennisNFT used link is the link to the images. The images then result with the meta data (json) the NFT. We used the ERC1155 because we have different types of NFTs: White, Bronze, Silver and Gold. Gold of course for the players who supported the club the most with their presence. </p>
 <p>Now we come to the deployment on the rinkeby network. To do this, run the following in the smart contract folder: </p>
