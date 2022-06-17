@@ -32,7 +32,7 @@ first of all you need Meta Mask and Rinkeby. You can simply add Meta Mask to you
 <p>Almost done. We are only missing the API_URL_ETHERSCAN. You can get it if you go to https://etherscan.io/. Log in on the top right and then click on API Keys in the bar on the left, which is currently located at Others. Again, create your own key by clicking on the "+ Add" button, assign project name and copy and paste the Api Key Token. Very good you dear ones. </p>
 <p>Another small addition our NFTs for this project are on ipfs. In the json files in the TennisNFT used link is the link to the images. The images then result with the meta data (json) the NFT. We used the ERC1155 because we have different types of NFTs: White, Bronze, Silver and Gold. Gold of course for the players who supported the club the most with their presence. </p>
 <p>Now we come to the deployment on the rinkeby network. To do this, run the following in the smart contract folder: </p>
-<p>><code>cnpx hardhat run scripts/deploy.js --network rinkeby</code></p>
+<p>><code>npx hardhat run scripts/deploy.js --network rinkeby</code></p>
 <p>you will get the contract address as response. Copy it! We will need it in a moment. The output in the console looks like this: 
 Club Address is : 0xD49450E0110b8EB3.…</p>
 <p>Now you have to verify the contract. To do this, call the following in the command line with your contract address: </p>
