@@ -58,7 +58,7 @@ back to the src folder</p>
 <h4>AND:</h4>
 <p>><code>npm start</code></p>
 
-<p>PS. to make the frontend runnable, we copied our ABI ... into the src folder from .... But it is the same for you, if you don't change anything in thecontract :) Have fun trying it out ;)</p>
+<p>PS. to make the frontend runnable, we copied our ABI from the folder smartcontract/artifacts/contracts/Club.sol/Club.json into the src folder from tennis-nft But it is the same for you, if you don't change anything in thecontract :) Have fun trying it out ;)</p>
 <p>PPS. If you are better in frontend than we are happy about optimization and feedback maybe to generate a MVP :) </p>
 </body>
 </html>
