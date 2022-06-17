@@ -38,7 +38,7 @@ Club Address is : 0xD49450E0110b8EB3.…</p>
 <p>Now you have to verify the contract. To do this, call the following in the command line with your contract address: </p>
 <p>><code>npx hardhat verify --network rinkeby --constructor-args arguments/club.arguments.js  0xD49450E0110b8EB3…</code></p>
 <p>PS. we need the Contract address right away again, but let's switch to the frontend first ;)</p>
-<h3>Backenend</h3>
+<h3>Frontend</h3>
 <p>do the following in the console:</p>
 <p>><code>cd ..</code></p>
 <p>><code>cd tennis-nft</code></p>
