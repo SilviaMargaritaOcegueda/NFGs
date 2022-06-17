@@ -2,62 +2,66 @@
 
 pragma solidity ^0.8.0;
 
-import 'zeppelin-solidity/contracts/math/SafeMath.sol';
-import 'zeppelin-solidity/contracts/ownership/Ownable.sol';
 
-// contract for sports club to register Athelets 
-// 
+import "@openzeppelin/contracts/access/Ownable.sol";
+
+// Contract for sports club to register Athelets.
 contract AthleteRegistration is Ownable {
+  
+  // This is a helper for seting the unique id
+  // it is automatically initialized by 0. 
+  uint32 public idCounter;
+  
+  // These are the sorts of NFTs that can be minted.
+  enum Sorts { white, bronze, silver, gold }
 
-  //using SafeMath for uint32;
+  // Event for the succesful registration of a new Athelte.
+  event NewAthlete(uint athleteId, bytes32 name);
   
-  //should be set to enum cause of efficincy
-  string[4] nftSorts = [ "white", "bronze", "silver", "gold" ];
-  // event for the succesful registration of a new Athelte
-  event NewAthlete(uint athleteId, string name);
-  
-  // struct of Athelte with specific information of the athlete
+  // Struct of Athelte with specific information of the athlete.
   struct Athlete {
     uint athleteId;
-    string name;
+    bytes32 name;
     address athleteWallet;
-    string nftSort;
+    Sorts nftSort;
     uint32 tournaments;
     uint32 trainings;
   }
-  // array of athelets with its sepcifc content of the Athlete
+
+
+  // Array of athelets with its specifc data of the Athlete.
   Athlete[] public athletes;
-  // mapping of address from athelte to wallet id of the Athlete
+
+  // Mapping of wallet address from athelte to ID of the Athlete.
   mapping ( address => uint) public athleteWalletToAthleteId;
-  // mapping of ID of the Athlete given from club to Athelte on chain
-  mapping (uint => Athlete) public athleteIdToAthlete;
-
-  /** 
-    * @dev modifier to check that a specifc _athleteId is not there already
-    */  
- //   modifier athleteIdCheck(uint _athleteId) { 
- //       require(
- //           athleteWalletToAthleteId[_athleteId] ,
- //           "AthelteID not unique"
- //       );
- //       _;
- //   }
- // TO DO: add modifier to function after external: athleteIdCheck(_athleteId)
-
-  // function to register a new Athelet based on input vairables
-  function registerAthlete(uint _athleteId, string memory _name, address _athleteWallet) external  onlyOwner {
-    // generate a new Athlete struct in memory and add values to the memory struct
-    Athlete memory _newAthlete = Athlete(_athleteId, _name, _athleteWallet, nftSorts[0], 0, 0);
-    // push Athelte into the array of athletes pn chain
-    athletes.push(_newAthlete);
-    // require athlete wallet not exists yet!
-    // set address mapping to the athlete 
-    athleteIdToAthlete[_athleteId] = _newAthlete;
-    // set mapping to athlete id given from input
-    // require athlete id not exists yet!
-    athleteWalletToAthleteId[_athleteWallet] = _athleteId;
-    // emit event of succesful registration for the frontend
-    emit NewAthlete(_athleteId, _name);
+  
+ // @dev modifier to check that a specifc _athleteWallet is not there already.
+  modifier uniqueWallet(address _athleteWallet) { 
+      require(
+          athleteWalletToAthleteId[_athleteWallet] == 0 ,
+          "Athlete wallet not unique"
+      );
+      _;
   }
-
+ 
+  // Function to register a new Athelet based on input variables.
+  function registerAthlete(bytes32 _name, address _athleteWallet) external uniqueWallet( _athleteWallet) onlyOwner {
+  //function registerAthlete(string memory _name, address _athleteWallet) external onlyOwner {
+    // Generate a new Athlete register including the inputs from the owner stored in memory.
+    // Push the new Athelte into the array of athletes.
+    idCounter++;
+    athletes.push(Athlete({
+      athleteId: idCounter,
+      name: _name,
+      athleteWallet: _athleteWallet,
+      nftSort: Sorts.white,
+      tournaments: 0,
+      trainings: 0
+    }));
+    //athletes.push(_newAthlete);
+    // Set wallet address for the athlete ID.
+    athleteWalletToAthleteId[_athleteWallet] = idCounter;
+    // Emit event to the front end.
+    emit NewAthlete(idCounter, _name);
+  }
 }

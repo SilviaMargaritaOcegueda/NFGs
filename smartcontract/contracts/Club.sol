@@ -2,69 +2,102 @@
 
 pragma solidity ^0.8.0;
 
-import 'zeppelin-solidity/contracts/math/SafeMath.sol';
-import 'zeppelin-solidity/contracts/ownership/Ownable.sol';
 import './AthleteRegistration.sol';
+import './TennisNFT.sol';
+import "@openzeppelin/contracts/utils/math/SafeMath.sol";
 
-contract Club is AthleteRegistration {
-    
-  using SafeMath for uint32;
+
+contract Club is AthleteRegistration, TennisNFT {
+  
   using SafeMath for uint;
 
-  uint32 trainingsPerYear;
-  uint32 pointsPerTournament;
+  // The club admin declare how many session trainings 
+  // have place on a whole season.
+  uint32 public trainingsPerYear;
   
-  event updatedNftSort(uint athleteId, string nftSort);
+  // The club admin declare how many extra sessions wants 
+  // to assign an athlete for participating on a tournament.
+  uint32 public pointsPerTournament;
+  
+  // Map that holds the minimum percentaje of 
+  // attendance to get the respective NFT sort.
+  mapping ( Sorts => uint32 ) public minimums;
+  
+  // Notifies that the records and NFT sort had been updated.
+  event AthleteRecordsUpdated(uint athleteId, Sorts nftSort);
 
-  mapping ( string => uint32 ) private percentage;
-    
+  // Notifies how many NFTs has been minted.
+  event Minted(uint mintCount);
 
-  address[] public whites;
-  address[] public bronzes;
-  address[] public silvers;
-  address[] public golds;
+  constructor(uint32 _trainingsPerYear, uint32 _pointsPerTournament) {    
+    setSeason(_trainingsPerYear, _pointsPerTournament);
+    // Calculate and set the minimum of attendances to 
+    // trainning sessions that each sort of NFT implies.
+    // "gold" NFT(converted to bytes32) is earned when attending 90% of the sessions or more. 
+    minimums[Sorts.gold] = _trainingsPerYear * 90 / 100;
+    // "silver" NFT is aerned when attending 70% of the sessions or more.
+    minimums[Sorts.silver] = _trainingsPerYear * 70 / 100;
+    // "bronze" NFT is aerned when attending 60% of the sessions or more.
+    minimums[Sorts.bronze] = _trainingsPerYear * 60 / 100; 
+  }
 
-  constructor(uint32 _trainingsPerYear, uint32 _pointsPerTournament) {
+  function setSeason(uint32 _trainingsPerYear, uint32 _pointsPerTournament) private {
     pointsPerTournament = _pointsPerTournament;
-    percentage["gold"] = _trainingsPerYear * 90 / 100;
-    percentage["silver"] = _trainingsPerYear * 70 / 100;
-    percentage["bronze"] = _trainingsPerYear * 60 / 100; 
+    trainingsPerYear = _trainingsPerYear;
   }
 
-  function resetRecords() external onlyOwner {
-    for (uint i; i < athletes.length; i++) {
-      athletes[i].tournaments = 0;
-      athletes[i].trainings = 0;
-      athletes[i].nftSort = nftSorts[0];
-    }  
-  }
-
+  // The admin can update the records by incrementing the number of 
+  // attendances and tournaments joined.
   function incrementRecords(uint _athleteId, uint32 _tournaments, uint32 _trainings) external onlyOwner {
-    athleteIdToAthlete[_athleteId].tournaments += _tournaments;
-    athleteIdToAthlete[_athleteId].trainings += _trainings;     
+    uint athletesIndex = _athleteId - 1;
+    athletes[athletesIndex].tournaments += _tournaments;
+    athletes[athletesIndex].trainings += _trainings;
+    // Triggers the calculation of attendances of each 
+    // athlete and update the sort of NFT earned.
+    updateNftSort(athletesIndex);
+    emit AthleteRecordsUpdated(_athleteId, athletes[athletesIndex].nftSort);
+  }
+      
+
+  function updateNftSort(uint _athletesIndex) private {
+    // Set nftSort to gold in athletes array if the amount of trainings
+    //  is higher than the minimum. 
+    if((athletes[_athletesIndex].tournaments * pointsPerTournament + athletes[_athletesIndex].trainings) >= minimums[Sorts.gold]) {
+      athletes[_athletesIndex].nftSort = Sorts.gold;
+    // Do the same for silver and bronce
+    } else if((athletes[_athletesIndex].tournaments * pointsPerTournament + athletes[_athletesIndex].trainings) >= minimums[Sorts.silver]) {
+      athletes[_athletesIndex].nftSort = Sorts.silver;
+    } else if((athletes[_athletesIndex].tournaments * pointsPerTournament + athletes[_athletesIndex].trainings) >= minimums[Sorts.bronze]) {
+      athletes[_athletesIndex].nftSort = Sorts.bronze;
+    }    
   }
 
-  function updateNftSort() public onlyOwner {
-    delete whites;
-    delete bronzes;
-    delete silvers;
-    delete golds;
+  // It mints the NFT and reset the athlete records for each athlete.
+  function mintAndResetRecords() external onlyOwner{
+    require(idCounter > 0, "Zero athletes enrolled");
+    uint mintCount;
+    //This is inefficient because we can run out of gas if the idCounter 
+    // limit is too large. However, we didn't find a better way to iterate 
+    // over the athletes array besides the loop.
+    for(uint i = 0; i < idCounter; i++ ){
+      singleMint(i);
+      mintCount++;
+      resetRecords(i);
+    }
+    emit Minted(mintCount);
+  }
+  
+  //Call the mint function from the TennisNFT contract.  
+  function singleMint(uint _athletesIndex) private {
+    mint(athletes[_athletesIndex].athleteWallet, uint(athletes[_athletesIndex].nftSort), 1);
+  }
 
-    for (uint i; i < athletes.length; i++) {
-      if((athletes[i].tournaments.mul(pointsPerTournament) + athletes[i].tournaments) >= percentage["gold"]) {
-        athletes[i].nftSort = "gold";
-        golds.push(athletes[i].athleteWallet);
-      } else if((athletes[i].tournaments.mul(pointsPerTournament) + athletes[i].tournaments) >= percentage["silver"]) {
-        athletes[i].nftSort = "silver";  
-        silvers.push(athletes[i].athleteWallet);
-      } else if((athletes[i].tournaments.mul(pointsPerTournament) + athletes[i].tournaments) >= percentage["bronze"]) {
-        athletes[i].nftSort = "bronze";  
-        bronzes.push(athletes[i].athleteWallet);
-      } 
-      athletes[i].nftSort = "white";
-      whites.push(athletes[i].athleteWallet);    
-        
-      emit updatedNftSort(athletes[i].athleteId, athletes[i].nftSort);
-    }  
+  // Clears records and set NFT sort to white.
+  function resetRecords(uint _athletesIndex) private {
+      // Delete records in the athletes array
+      athletes[_athletesIndex].tournaments = 0;
+      athletes[_athletesIndex].trainings = 0;
+      // Set NFT sort to white
+      athletes[_athletesIndex].nftSort = Sorts.white; 
   }
 }
