@@ -16,8 +16,7 @@
 <p>If you want to see if our unit tests work for you then do the following:</p>
 <p>><code>npx hardhat test</code></p>
 <p>Now you are probably asking yourself, how do you get our contracts on a test network, yes guessed right, we will explain that to you now: 
-first of all you need Meta Mask and Rinkeby. You can simply add Meta Mask to your browser. Then you need your private key. In this Youtube video you can find out how to get it, if you don't know:  https://www.youtube.com/watch?v=dSx14epF1lc</p>
-<p>If you want to see if our unit tests work for you then do the following:</p>
+first of all you need Meta Mask and Rinkeby. You can simply add Meta Mask to your browser. Then you need your private key. In this Youtube video you can find out how to get it, if you don't know:  https://www.youtube.com/watch?v=dSx14epF1lc and Here is how you get your private key: https://metamask.zendesk.com/hc/en-us/articles/360015289632-How-to-export-an-account-s-private-key</p>
 <p>PRIVATE_KEY=""</p>
 <p>API_URL_RINKEBY=""</p>
 <p>NFT_STORAGE_API_KEY=""</p>
@@ -57,7 +56,11 @@ back to the src folder</p>
 <p>><code>cd .. </code></p>
 <h4>AND:</h4>
 <p>><code>npm start</code></p>
-
+<p></p>
+<p>When you want to check your minted NFTs for the speficic wallets use</p>
+<p>https://rinkeby.rarible.com/</p>
+<p>https://testnets.opensea.io/</p>
+<p>and search for the contract address. In general rarible is a bit faster then opensea and sometimes both sides are slow ;)</p>
 <p>PS. to make the frontend runnable, we copied our ABI from the folder smartcontract/artifacts/contracts/Club.sol/Club.json into the src folder from tennis-nft But it is the same for you, if you don't change anything in thecontract :) Have fun trying it out ;)</p>
 <p>PPS. If you are better in frontend than we are happy about optimization and feedback maybe to generate a MVP :) </p>
 </body>
