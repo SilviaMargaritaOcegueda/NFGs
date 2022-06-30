@@ -4,13 +4,10 @@ pragma solidity ^0.8.0;
 
 import './AthleteRegistration.sol';
 import './TennisNFT.sol';
-import "@openzeppelin/contracts/utils/math/SafeMath.sol";
 
 
 contract Club is AthleteRegistration, TennisNFT {
-  
-  using SafeMath for uint;
-
+ 
   // The club admin declare how many session trainings 
   // have place on a whole season.
   uint32 public trainingsPerYear;
