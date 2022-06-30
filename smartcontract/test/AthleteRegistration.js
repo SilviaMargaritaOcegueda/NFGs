@@ -56,7 +56,7 @@ describe("AthleteRegistration", function(){
            // Checks if the emited event consists of the expected variabls
             const stringInBytes = utils.formatBytes32String("Test")
             await expect(hardhatAthleteRegistration.registerAthlete(stringInBytes, player.address))
-                .to.emit(hardhatAthleteRegistration, "NewAthlete")
+                .to.emit(hardhatAthleteRegistration, "NewAthleteRegistered")
                 .withArgs(1, stringInBytes);
         });
         

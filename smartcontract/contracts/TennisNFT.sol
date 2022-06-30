@@ -2,7 +2,6 @@
 pragma solidity ^0.8.0;
 
 //Import ERC1155 token contract from Openzepplin
-import "./console.sol";
 import "@openzeppelin/contracts/token/ERC1155/ERC1155.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 

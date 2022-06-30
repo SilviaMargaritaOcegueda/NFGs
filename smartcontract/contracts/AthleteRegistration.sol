@@ -16,7 +16,7 @@ contract AthleteRegistration is Ownable {
   enum Sorts { white, bronze, silver, gold }
 
   // Event for the succesful registration of a new Athelte.
-  event NewAthlete(uint athleteId, bytes32 name);
+  event NewAthleteRegistered(uint indexed athleteId, bytes32 indexed name);
   
   // Struct of Athelte with specific information of the athlete.
   struct Athlete {
@@ -62,6 +62,6 @@ contract AthleteRegistration is Ownable {
     // Set wallet address for the athlete ID.
     athleteWalletToAthleteId[_athleteWallet] = idCounter;
     // Emit event to the front end.
-    emit NewAthlete(idCounter, _name);
+    emit NewAthleteRegistered(idCounter, _name);
   }
 }
