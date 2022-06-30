@@ -15,10 +15,11 @@ contract Club is AthleteRegistration, TennisNFT {
   // The club admin declare how many extra sessions wants 
   // to assign an athlete for participating on a tournament.
   uint32 public pointsPerTournament;
-  
+    
   // Map that holds the minimum percentaje of 
   // attendance to get the respective NFT sort.
   mapping ( Sorts => uint32 ) public minimums;
+
   
   // Notifies that the records and NFT sort had been updated.
   event AthleteRecordsUpdated(uint athleteId, Sorts nftSort);
@@ -76,6 +77,14 @@ contract Club is AthleteRegistration, TennisNFT {
     //This is inefficient because we can run out of gas if the idCounter 
     // limit is too large. However, we didn't find a better way to iterate 
     // over the athletes array besides the loop.
+    // Mentor suggestion is to set a limit of mints, this doesn't solve to ensure the minting of the whole batch 
+    // uint32 public constant MAX_MINTS = 100; (It must be on the top in case we use it)
+    // for(uint i = 0 ; i < MAX_MINTS ; i++ ){
+    //   singleMint(i);
+    //   mintCount++;
+    //   resetRecords(i);
+    // }
+    
     for(uint i = 0; i < idCounter; i++ ){
       singleMint(i);
       mintCount++;
