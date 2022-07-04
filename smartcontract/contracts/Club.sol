@@ -3,11 +3,14 @@
 pragma solidity ^0.8.0;
 
 import './AthleteRegistration.sol';
-import './TennisNFT.sol';
+import './ITennisNFT.sol';
 
 
-contract Club is AthleteRegistration, TennisNFT {
+contract Club is AthleteRegistration {
  
+  // The address from the TennisNFT contract passed to the constructor
+  address private tennisNftAddress;
+
   // The club admin declare how many session trainings 
   // have place on a whole season.
   uint32 public trainingsPerYear;
@@ -27,8 +30,9 @@ contract Club is AthleteRegistration, TennisNFT {
   // Notifies how many NFTs has been minted.
   event Minted(uint mintCount);
 
-  constructor(uint32 _trainingsPerYear, uint32 _pointsPerTournament) {    
+  constructor(uint32 _trainingsPerYear, uint32 _pointsPerTournament, address _tennisNftAddress) {    
     setSeason(_trainingsPerYear, _pointsPerTournament);
+    tennisNftAddress = _tennisNftAddress;
     // Calculate and set the minimum of attendances to 
     // trainning sessions that each sort of NFT implies.
     // "gold" NFT(converted to bytes32) is earned when attending 90% of the sessions or more. 
@@ -93,9 +97,9 @@ contract Club is AthleteRegistration, TennisNFT {
     emit Minted(mintCount);
   }
   
-  //Call the mint function from the TennisNFT contract.  
+  //Call the mint function from the ITennisNFT interface.  
   function singleMint(uint _athletesIndex) private {
-    mint(athletes[_athletesIndex].athleteWallet, uint(athletes[_athletesIndex].nftSort), 1);
+    ITennisNFT(tennisNftAddress).mint(athletes[_athletesIndex].athleteWallet, uint(athletes[_athletesIndex].nftSort), 1);
   }
 
   // Clears records and set NFT sort to white.
