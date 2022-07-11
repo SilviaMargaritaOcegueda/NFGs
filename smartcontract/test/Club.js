@@ -4,6 +4,9 @@ const { ethers } = require("hardhat");
 var assert = require('assert');
 const { isCallTrace } = require("hardhat/internal/hardhat-network/stack-traces/message-trace");
 
+//*This we tried: const { helpers } = require("@nomicfoundation/hardhat-network-helpers");
+//*This we tried: console.log(helpers);
+
 // for string converting to use as byte32
 const utils = ethers.utils
 
@@ -17,18 +20,25 @@ describe("Club", function(){
     let addresses;
     let trainingsPerYear;
     let pointsPerTournament;
+    let TennisNFT;
+    let tennisNFT;
         
     //Hook
     beforeEach(async function(){
         // If you need to send a transaction from an account other than the default one
         [admin, athlete, athlete2, ...addresses] = await ethers.getSigners();
-        // admin = await ethers.getSigners();
- 
-        // Create an instance of our contract
-        Club = await ethers.getContractFactory("Club");
+        console.log(admin.address);
         
+        // Create an instance of our contract
+        //*This we tried: await helpers.impersonateAccount(admin.address);
+        TennisNFT = await ethers.getContractFactory("TennisNFT");
+        tennisNFT = await TennisNFT.connect(admin).deploy();
+        await tennisNFT.deployed();
+
+        Club = await ethers.getContractFactory("Club");
+                        
         // Deploy this instance
-        hardhatClub = await Club.deploy(240,6);
+        hardhatClub = await Club.connect(admin).deploy(240,6,tennisNFT.address);
 
         // Register the first athlete 
         const nameInBytes = utils.formatBytes32String("Alan")
