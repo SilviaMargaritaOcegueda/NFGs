@@ -1,5 +1,4 @@
 // SPDX-License-Identifier: Unlicense
-
 pragma solidity ^0.8.0;
 
 
@@ -16,7 +15,7 @@ contract AthleteRegistration is Ownable {
   enum Sorts { white, bronze, silver, gold }
 
   // Event for the succesful registration of a new Athelte.
-  event NewAthleteRegistered(uint indexed athleteId, bytes32 indexed name);
+  event NewAthleteRegistered(uint indexed athleteId, Athlete _newAthlete);
   
   // Struct of Athelte with specific information of the athlete.
   struct Athlete {
@@ -50,18 +49,19 @@ contract AthleteRegistration is Ownable {
     // Generate a new Athlete register including the inputs from the owner stored in memory.
     // Push the new Athelte into the array of athletes.
     idCounter++;
-    athletes.push(Athlete({
+    Athlete memory _newAthlete = Athlete({
       athleteId: idCounter,
       name: _name,
       athleteWallet: _athleteWallet,
       nftSort: Sorts.white,
       tournaments: 0,
       trainings: 0
-    }));
+    });
+    athletes.push(_newAthlete);
     //athletes.push(_newAthlete);
     // Set wallet address for the athlete ID.
     athleteWalletToAthleteId[_athleteWallet] = idCounter;
     // Emit event to the front end.
-    emit NewAthleteRegistered(idCounter, _name);
+    emit NewAthleteRegistered(idCounter, _newAthlete);
   }
 }
