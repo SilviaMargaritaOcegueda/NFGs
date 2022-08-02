@@ -5,7 +5,6 @@ pragma solidity ^0.8.0;
 import './AthleteRegistration.sol';
 import './ITennisNFT.sol';
 
-
 contract Club is AthleteRegistration {
  
   // The address from the TennisNFT contract passed to the constructor

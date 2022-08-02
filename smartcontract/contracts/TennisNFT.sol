@@ -32,12 +32,12 @@ contract TennisNFT is ERC1155, Ownable {
     //_mint() of ERC1155 is an internal function which can't be called from the outside. Let's wrap around it within our mint() function
     //This mint() function can be called by anyone. We need to impose a restriction so that only the owner of the contract can call the mint() function
     //This can be accomplished by the OpenZepplin Ownable Smart Contract. Import it
-    function mint(address account, uint256 id, uint256 amount) public onlyOwner {
+    function mint(address account, uint256 id, uint256 amount) external {
         _mint(account, id, amount, "");
     } 
 
     //Only the contract owner should have the privilege to burn the token
-    function burn(address account, uint256 id, uint256 amount) public onlyOwner{
+    function burn(address account, uint256 id, uint256 amount) external{
         
         _burn(account, id, amount);
     }
@@ -53,29 +53,8 @@ contract TennisNFT is ERC1155, Ownable {
         address to,
         uint256 id,
         uint256 amount
-    ) public onlyOwner{
+    ) external{
         safeTransferFrom(from, to, id, amount, "");
     }
-
-        // opensea supported metadata
-//   function uri(uint256 tokenId) override public view returns (string memory) {
-//        return(
-//            string(abi.encodePacked(
-//                "https://bafybeigsfkis362b7jnnnwx4pkngayza3b3xgjiv62kcood4yhsgco3dva.ipfs.nftstorage.link/",
-//                Strings.toString(tokenId),
-//                "json"
-//            )
-//        ),
-//    }
-
-    // data on ipfs: 
-    //CID bafybeigsfkis362b7jnnnwx4pkngayza3b3xgjiv62kcood4yhsgco3dva
-    //https://bafybeigsfkis362b7jnnnwx4pkngayza3b3xgjiv62kcood4yhsgco3dva.ipfs.nftstorage.link/
-    //ipfs://bafybeigsfkis362b7jnnnwx4pkngayza3b3xgjiv62kcood4yhsgco3dva
-    //ipfs://bafyreifsig5a4ujmfeyjfidtnwvjeeukvnwvvefiumvcx2kv2l4cnaxztu/metadata.json
-    //https://bafybeigsfkis362b7jnnnwx4pkngayza3b3xgjiv62kcood4yhsgco3dva.ipfs.nftstorage.link/BronzeLeague.png
-    //https://bafybeigsfkis362b7jnnnwx4pkngayza3b3xgjiv62kcood4yhsgco3dva.ipfs.nftstorage.link/GoldLeague.png
-    //https://bafybeigsfkis362b7jnnnwx4pkngayza3b3xgjiv62kcood4yhsgco3dva.ipfs.nftstorage.link/SilverLeague.png
-    //https://bafybeigsfkis362b7jnnnwx4pkngayza3b3xgjiv62kcood4yhsgco3dva.ipfs.nftstorage.link/WhiteLeague.png
 
 }
