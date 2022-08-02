@@ -51,7 +51,7 @@ describe("Club", function(){
     describe("Deployment", function(){
         it("Should should deploy sucessfully", async function(){
             const address = hardhatClub.address;
-            assert.notEqual(address, ethers.constants.AddressZero);
+            assert.notEqual(address, '' || null || 0x0 || undefined);
             console.log("Club contract deployed");
         });
         //Mention the test case here - Test Case 1

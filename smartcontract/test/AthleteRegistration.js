@@ -40,24 +40,24 @@ describe("AthleteRegistration", function(){
         //Testcase 1 Succesful deployment
         it("Should deploy sucessfully", async function(){
             const address = hardhatAthleteRegistration.address;
-            assert.notEqual(address, ethers.constants.AddressZero);
+            assert.notEqual(address, '' || null || 0x0 || undefined);
         });
         // Testscase 2 Checks if the intial counter is set to 0
         it('Initial counter is set to 0', async function () {
             expect(await(hardhatAthleteRegistration.connect(admin).idCounter())).to.eql(0);
+            //console.log("Entries of athelteID", athletesId);
         });
     });
     
     describe("Testing the Registration", async function(){
         it("Register event has been emitted when a new Athelte was registered", async function(){
-            // Test case 3 checks if the paramter in the Event after registration are correct
-            // Register 1 new Athelte with Name Test and address player 
-            // Checks if the emited event consists of the expected variabls
+           // Test case 3 checks if the paramter in the Event after registration are correct
+           // Register 1 new Athelte with Name Test and address player 
+           // Checks if the emited event consists of the expected variabls
             const stringInBytes = utils.formatBytes32String("Test")
             await expect(hardhatAthleteRegistration.registerAthlete(stringInBytes, player.address))
-            .to.emit(hardhatAthleteRegistration, "NewAthleteRegistered")
-            .withArgs(1, Athlete);
-            console.log(hardhatAthleteRegistration.Athlete);
+                .to.emit(hardhatAthleteRegistration, "NewAthleteRegistered")
+                .withArgs(1, stringInBytes);
         });
         
 
