@@ -33,7 +33,7 @@ function Athlete(props) {
                 });
                 console.log("This is the formated event number", athelteIdFromContract )
                 try {
-                  const response = await contract.incrementRecords(_id, _addTurnamentsPlayed, _addPoints);                 
+                  const response = await contract.callStatic.incrementRecords(_id, _addTurnamentsPlayed, _addPoints);                 
                   await response.wait()
                   props.refreshPlayer()
                   console.log("response: ", response);

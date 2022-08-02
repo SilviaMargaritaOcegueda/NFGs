@@ -113,7 +113,7 @@ function App() {
           });
           console.log("This is the formated event number", athelteIdFromContract )
           try {
-            const response = await contract.registerAthlete(athleteNameBytes32, walletAddress);
+            const response = await contract.callStatic.registerAthlete(athleteNameBytes32, walletAddress);
             
             await response.wait()
             console.log("response: ", response);
@@ -188,7 +188,7 @@ function App() {
             signer
         );
           try {
-              const response = await contract.mintAndResetRecords();
+              const response = await contract.callStatic.mintAndResetRecords();
               await response.wait()
               console.log('response:', response);
           } catch (err) {
