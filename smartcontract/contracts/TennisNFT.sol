@@ -9,6 +9,7 @@ import "@openzeppelin/contracts/access/Ownable.sol";
 contract TennisNFT is ERC1155, Ownable {
 
     address public admin;
+    address public clubContractAddress;
 
     // Giving a name to our contract
     string public name = "Tennis NFT from NFGs";
@@ -19,6 +20,11 @@ contract TennisNFT is ERC1155, Ownable {
     uint public constant SILVER = 2;
     uint public constant GOLD = 3;
 
+    modifier onlyFromClubContract() {
+        require(msg.sender == clubContractAddress, "Not authorized");
+        _;
+    }
+
     //Define our constructor - It will mint the initial version of the above NFTs
     //ERC1155 constructor argument accepts a string memory argument named 'uri_' - The URI to our NFT metadata
     //URI- We need to provide where our metadata will be hosted 
@@ -28,16 +34,20 @@ contract TennisNFT is ERC1155, Ownable {
         
     }
 
+    function setClubContractAddress(address _clubContractAddress) onlyOwner {
+        clubContractAddress = _clubContractAddress;
+    }
+
     //We are going to create a mint() function that will allow the user to mint more NFTs in the future
     //_mint() of ERC1155 is an internal function which can't be called from the outside. Let's wrap around it within our mint() function
     //This mint() function can be called by anyone. We need to impose a restriction so that only the owner of the contract can call the mint() function
     //This can be accomplished by the OpenZepplin Ownable Smart Contract. Import it
-    function mint(address account, uint256 id, uint256 amount) external {
+    function mint(address account, uint256 id, uint256 amount) external onlyFromClubContract {
         _mint(account, id, amount, "");
     } 
 
     //Only the contract owner should have the privilege to burn the token
-    function burn(address account, uint256 id, uint256 amount) external{
+    function burn(address account, uint256 id, uint256 amount) external onlyFromClubContract {
         
         _burn(account, id, amount);
     }
@@ -53,7 +63,7 @@ contract TennisNFT is ERC1155, Ownable {
         address to,
         uint256 id,
         uint256 amount
-    ) external{
+    ) external onlyFromClubContract {
         safeTransferFrom(from, to, id, amount, "");
     }
 
