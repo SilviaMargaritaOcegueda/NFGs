@@ -40,6 +40,8 @@ describe("Club", function(){
         // Deploy this instance
         hardhatClub = await Club.connect(admin).deploy(240,6,tennisNFT.address);
 
+        await tennisNFT.setClubContractAddress(hardhatClub.address);
+        
         // Register the first athlete 
         const nameInBytes = utils.formatBytes32String("Alan")
         await hardhatClub.registerAthlete(nameInBytes,athlete.address);

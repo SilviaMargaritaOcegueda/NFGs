@@ -34,6 +34,8 @@ describe("TennisNFT", function(){
         bronzeId = await hardhatTennisNFT.BRONZE();
         silverId = await hardhatTennisNFT.SILVER();
         goldId = await hardhatTennisNFT.GOLD();
+
+        await hardhatTennisNFT.setClubContractAddress(admin.address);
     });
 
     //Write your test cases within this sub test-suite

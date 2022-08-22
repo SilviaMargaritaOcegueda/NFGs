@@ -34,7 +34,7 @@ contract TennisNFT is ERC1155, Ownable {
         
     }
 
-    function setClubContractAddress(address _clubContractAddress) onlyOwner {
+    function setClubContractAddress(address _clubContractAddress) public onlyOwner {
         clubContractAddress = _clubContractAddress;
     }
 
